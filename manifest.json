@@ -1,0 +1,22 @@
+{
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "icons": [
+    {
+      "sizes": "192x192",
+      "src": "icon-192.png",
+      "type": "image/png"
+    },
+    {
+      "sizes": "512x512",
+      "src": "icon.png",
+      "type": "image/png"
+    }
+  ],
+  "id": "https://jonlarson22.github.io/USU-Aggie-Handball/",
+  "name": "USU Aggie Handball",
+  "scope": "/USU-Aggie-Handball/",
+  "short_name": "Aggie Handball",
+  "start_url": "index.html",
+  "theme_color": "#0F2439"
+}

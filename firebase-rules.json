@@ -1,0 +1,46 @@
+{
+  "rules": {
+    ".read": true,
+    "players": {
+      ".read": true,
+      ".write": "auth != null && (root.child('admins').child(auth.uid).child('role').val() == 'owner' || root.child('admins').child(auth.uid).child('role').val() == 'admin')"
+    },
+    "pending": {
+      ".read": true,
+      ".write": true
+    },
+    "history": {
+      ".read": true,
+      ".write": "auth != null && (root.child('admins').child(auth.uid).child('role').val() == 'owner' || root.child('admins').child(auth.uid).child('role').val() == 'admin')"
+    },
+    "tournaments": {
+      ".read": true,
+      ".write": "auth != null && (root.child('admins').child(auth.uid).child('role').val() == 'owner' || root.child('admins').child(auth.uid).child('role').val() == 'admin' || root.child('admins').child(auth.uid).child('role').val() == 'director')",
+      "active": {
+        "divisions": {
+          "$div": {
+            "$bracket": {
+              "$r": {
+                "$m": {
+                  "live": {
+                    ".write": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "admins": {
+      ".read": "auth != null",
+      ".write": "auth != null && (!root.child('admins').exists() || root.child('admins').child(auth.uid).child('role').val() == 'owner')"
+    },
+    "adminRequests": {
+      ".read": "auth != null && root.child('admins').child(auth.uid).child('role').val() == 'owner'",
+      "$uid": {
+        ".write": "auth != null && (auth.uid == $uid || (root.child('admins').child(auth.uid).child('role').val() == 'owner'))"
+      }
+    }
+  }
+}
