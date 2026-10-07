@@ -1033,7 +1033,7 @@ function renderReport() {
             <h3 style="margin-top:0;">Rating Adjustments (${adjList.length})</h3>
             <div style="overflow-x:auto;">
             <table style="width:100%;border-collapse:collapse;font-size:12px;">
-                <thead><tr style="background:#222;">
+                <thead><tr style="background:var(--bg-deep);">
                     <th style="padding:8px;text-align:left;">Date</th>
                     <th style="padding:8px;"></th>
                     <th style="padding:8px;text-align:left;">Type</th>
@@ -1072,7 +1072,7 @@ function renderReport() {
             <h3 style="margin-top:0;">Matches (${allMs.length}${allMs.length > 100 ? ', showing 100' : ''})</h3>
             <div style="overflow-x:auto;">
             <table style="width:100%;border-collapse:collapse;font-size:12px;">
-                <thead><tr style="background:#222;">
+                <thead><tr style="background:var(--bg-deep);">
                     <th style="padding:8px;text-align:left;">Date</th>
                     <th style="padding:8px;">W/L</th>
                     <th style="padding:8px;text-align:left;">Opponents</th>

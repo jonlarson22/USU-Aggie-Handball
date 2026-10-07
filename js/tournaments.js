@@ -250,7 +250,7 @@ function renderSeedPicker() {
     const poolEl = document.getElementById('seed-pool');
     listEl.innerHTML = manualSeeds.length
         ? manualSeeds.map((n, i) => `
-            <div style="display:flex; align-items:center; gap:6px; background:#1a1a1a; padding:6px 8px; border-radius:4px; margin-bottom:4px;">
+            <div style="display:flex; align-items:center; gap:6px; background:var(--bg-panel); padding:6px 8px; border-radius:4px; margin-bottom:4px;">
                 <span style="background:var(--uha-gold); color:#000; font-weight:bold; border-radius:4px; padding:2px 8px; font-size:12px;">${i + 1}</span>
                 <span style="flex:1;">${n}</span>
                 <button onclick="moveSeed(${i}, -1)" style="width:auto; padding:2px 8px; font-size:12px;" ${i === 0 ? 'disabled style="width:auto; padding:2px 8px; font-size:12px; opacity:0.3;"' : ''}>▲</button>

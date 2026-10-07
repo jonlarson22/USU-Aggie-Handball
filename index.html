@@ -40,7 +40,7 @@
 <div class="leaderboard-box">
 <table id="leaderboardTable" style="width: 100%; border-collapse: collapse;">
     <thead>
-        <tr style="background: #222;">
+        <tr style="background: var(--bg-deep);">
             <th style="width: 15%; text-align: center; padding: 10px;">Rank</th>
             <th style="width: 45%; text-align: left; padding: 10px;">Name</th>
             <th style="width: 20%; text-align: center; padding: 10px;">Current</th>
@@ -122,7 +122,7 @@
     <section id="screen-history" class="screen" hidden>
 <h2>Match History</h2>
 <input type="text" id="historySearch" class="search-input" placeholder="&#128269; Search player name..." onkeyup="render()">
-<div class="tab-bar" style="margin-bottom: 15px; background: #111;">
+<div class="tab-bar" style="margin-bottom: 15px; background: var(--bg-deep);">
     <div id="histTS" class="tab active-tab" onclick="setHistoryMode('singles')">SINGLES</div>
     <div id="histTD" class="tab" onclick="setHistoryMode('doubles')">DOUBLES</div>
 </div>
@@ -148,7 +148,7 @@
             <select id="h2hB" onchange="runH2H()"></select>
         </div>
 
-        <div class="tab-bar" style="margin-bottom: 15px; background: #111;">
+        <div class="tab-bar" style="margin-bottom: 15px; background: var(--bg-deep);">
             <div id="h2hTS" class="tab active-tab" onclick="setH2HMode('singles')">SINGLES</div>
             <div id="h2hTD" class="tab" onclick="setH2HMode('doubles')">DOUBLES</div>
         </div>
@@ -264,20 +264,20 @@
                         <option value="random">Random Draw</option>
                         <option value="manual">Manual Seeds</option>
                     </select>
-                    <div id="manual-seeding-box" style="display:none; background:#111; padding:12px; border-radius:5px; border:1px solid #333; margin-bottom:12px;">
+                    <div id="manual-seeding-box" style="display:none; background:var(--bg-deep); padding:12px; border-radius:5px; border:1px solid #333; margin-bottom:12px;">
                         <div style="font-size:12px; color:var(--uha-gold); margin-bottom:8px; text-transform:uppercase; font-weight:bold;">Pick seeds in order (rest are drawn randomly)</div>
                         <div id="seed-list" style="margin-bottom:8px;"></div>
                         <div style="font-size:11px; color:var(--text-muted); margin-bottom:4px;">Tap a player to add as the next seed. Tap a seed to remove.</div>
                         <div id="seed-pool" style="display:flex; flex-wrap:wrap; gap:6px;"></div>
                     </div>
                     
-                    <div id="single-elim-settings" style="display: block; background: #222; padding: 15px; border-radius: 5px; margin-bottom: 20px; border-left: 3px solid var(--uha-gold);">
+                    <div id="single-elim-settings" style="display: block; background: var(--bg-deep); padding: 15px; border-radius: 5px; margin-bottom: 20px; border-left: 3px solid var(--uha-gold);">
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <input type="checkbox" id="single-elim-third-place" style="width: 18px; height: 18px; margin: 0; cursor: pointer;">
                             <label for="single-elim-third-place" style="font-size: 14px; color: var(--text-light); cursor: pointer;">Generate 3rd Place Playoff Match</label>
                         </div>
                     </div>
-                    <div id="double-elim-settings" style="display: none; background: #222; padding: 15px; border-radius: 5px; margin-bottom: 20px; border-left: 3px solid var(--uha-red);">
+                    <div id="double-elim-settings" style="display: none; background: var(--bg-deep); padding: 15px; border-radius: 5px; margin-bottom: 20px; border-left: 3px solid var(--uha-red);">
                         <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 5px;">Grand Final Rules:</div>
                         <select id="double-elim-final" class="uha-input" style="width: 100%;">
                             <option value="true_double">True Double Elimination</option>
@@ -287,7 +287,7 @@
 
                 <input type="text" id="division-name" placeholder="Enter Event Name" class="uha-input" style="margin-bottom: 15px; width: 100%;">
                                                 
-                    <div id="multi-group-settings" style="display:none; background: #111; padding: 15px; border-radius: 5px; border: 1px solid #333; margin-bottom: 20px; border-left: 3px solid var(--uha-gold);">
+                    <div id="multi-group-settings" style="display:none; background: var(--bg-deep); padding: 15px; border-radius: 5px; border: 1px solid #333; margin-bottom: 20px; border-left: 3px solid var(--uha-gold);">
                         <div style="font-size: 12px; color: var(--uha-gold); margin-bottom: 5px; text-transform: uppercase; font-weight: bold;">Group & Playoff Settings</div>
                         
                         <div style="display: flex; gap: 10px; margin-bottom: 15px;">
@@ -323,7 +323,7 @@
             <div class="column">
                <div class="section-title">Players</div>
 
-                <div class="input-group" style="flex-wrap: wrap; background: #1a1a1a; padding: 10px; border-radius: 6px; border: 1px solid #333;">
+                <div class="input-group" style="flex-wrap: wrap; background: var(--bg-panel); padding: 10px; border-radius: 6px; border: 1px solid #333;">
                     <input type="text" id="new-player-name" placeholder="New Player Name" style="flex: 2; min-width: 150px; margin-bottom: 5px;">
                     
                     <div style="display: flex; gap: 5px; flex: 1; min-width: 170px; margin-bottom: 5px;">
@@ -410,7 +410,7 @@
                 </div>
             </div>
             <div style="margin-top: 4px;"><label for="repMS">Match Type</label></div>
-            <div class="tab-bar" style="margin: 12px 0; background: #111;">
+            <div class="tab-bar" style="margin: 12px 0; background: var(--bg-deep);">
                 <div id="repMS" class="tab active-tab" onclick="setReportMode('singles')">SINGLES</div>
                 <div id="repMD" class="tab" onclick="setReportMode('doubles')">DOUBLES</div>
                 <div id="repMB" class="tab" onclick="setReportMode('both')">BOTH</div>

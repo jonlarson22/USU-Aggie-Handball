@@ -139,7 +139,7 @@ body {
 
 /* ---------- review queue (stacked: matchup, scores, buttons) ---------- */
 .queue-item {
-    background: #1a1a1a;
+    background: var(--bg-panel);
     border-left: 5px solid #f1c40f;
     padding: 15px;
     margin-bottom: 10px;
@@ -226,7 +226,7 @@ body {
 .live-scores { display: flex; gap: 12px; margin: 10px 0; }
 .live-side {
     flex: 1; min-width: 0;
-    background: #1a1a1a; border: 1px solid var(--border-color); border-radius: 10px;
+    background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 10px;
     padding: 12px 8px; text-align: center;
     display: flex; flex-direction: column; gap: 8px;
 }
@@ -242,14 +242,14 @@ body {
 .live-row { display: flex; gap: 8px; }
 .live-minus, .live-to-btn {
     flex: 1; padding: 10px 4px; border-radius: 8px; cursor: pointer;
-    background: #2a2a2a; color: #fff; border: 1px solid #444; font-size: 13px; font-weight: bold;
+    background: var(--bg-panel); color: var(--text-light); border: 1px solid var(--border-color); font-size: 13px; font-weight: bold;
 }
 .live-to-btn.used { opacity: 0.4; }
 .live-controls { display: flex; gap: 8px; margin-top: 12px; }
 .live-controls .btn-sm { flex: 1; }
 #live-gameend {
     margin-top: 14px; padding: 14px;
-    background: #1a1a1a; border: 1px solid var(--uha-gold); border-radius: 10px;
+    background: var(--bg-panel); border: 1px solid var(--uha-gold); border-radius: 10px;
     text-align: center;
 }
 
@@ -293,7 +293,7 @@ body {
     flex: 1; min-width: 0;
     display: flex; flex-direction: column; align-items: center; gap: 6px;
     text-align: center; cursor: pointer;
-    background: #1a1a1a; border: 1px solid var(--border-color); border-radius: 8px;
+    background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 8px;
     padding: 10px 6px;
 }
 .live-server-opt input { width: 22px; height: 22px; margin: 0; }
@@ -320,11 +320,11 @@ body.admin-mode th.admin-only { display: table-cell !important; }
 }
 .uha-btn:hover { filter: brightness(1.1); }
 .uha-btn-blue { background: var(--uha-blue); color: white; }
-.uha-btn-gold { background: var(--uha-gold); color: black; }
+.uha-btn-gold { background: var(--uha-blue); color: white; }
 .uha-btn-outline {
     background: transparent;
-    color: white;
-    border: 1px solid white;
+    color: var(--uha-blue);
+    border: 1px solid var(--uha-blue);
     padding: 12px;
     width: 100%;
     cursor: pointer;
@@ -340,7 +340,7 @@ body.admin-mode th.admin-only { display: table-cell !important; }
     padding: 10px;
     background: var(--bg-deep);
     border: 1px solid var(--border-color);
-    color: white;
+    color: var(--text-light);
     border-radius: 4px;
     margin-bottom: 10px;
 }
@@ -473,7 +473,7 @@ body.admin-mode th.admin-only { display: table-cell !important; }
 :is(#screen-leaderboard, #screen-enter, #screen-history, #screen-admin) .search-input {
     margin-bottom: 10px;
     border-color: var(--uha-blue) !important;
-    background: #1a1a1a;
+    background: var(--bg-panel);
 }
 
 /* enter-result match card */
@@ -513,7 +513,7 @@ body.admin-mode th.admin-only { display: table-cell !important; }
 :is(#screen-leaderboard, #screen-enter, #screen-history, #screen-admin) .score-input:focus {
     outline: none;
     border-color: var(--uha-gold) !important;
-    background: #222;
+    background: var(--bg-deep);
     box-shadow: 0 0 8px rgba(241, 196, 15, 0.3);
 }
 :is(#screen-leaderboard, #screen-enter, #screen-history, #screen-admin) .match-btn {
@@ -538,7 +538,7 @@ body.admin-mode th.admin-only { display: table-cell !important; }
 
 /* head-to-head */
 :is(#screen-leaderboard, #screen-enter, #screen-history, #screen-admin) .h2h-box {
-    background: #1a1a1a;
+    background: var(--bg-panel);
     padding: 16px;
     border-radius: 12px;
     border: 1px solid var(--border-color);
@@ -582,12 +582,12 @@ body.admin-mode th.admin-only { display: table-cell !important; }
     margin-top: 10px;
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    background: #1a1a1a;
+    background: var(--bg-panel);
 }
 :is(#screen-leaderboard, #screen-enter, #screen-history, #screen-admin) .leaderboard-box {
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    background: #1a1a1a;
+    background: var(--bg-panel);
     overflow-x: auto;
 }
 :is(#screen-leaderboard, #screen-enter, #screen-history, #screen-admin) .undo-btn {
@@ -738,7 +738,7 @@ body.admin-mode th.admin-only { display: table-cell !important; }
     border-left: 3px solid var(--uha-gold);
 }
 :is(#screen-tournaments, #admin-tournaments) .team-header {
-    background: #222;
+    background: var(--bg-deep);
     padding: 8px 12px;
     font-size: 13px;
     display: flex;
@@ -762,7 +762,7 @@ body.admin-mode th.admin-only { display: table-cell !important; }
 /* public bracket: bar + selectors */
 #screen-tournaments .tourney-bar {
     margin-bottom: 20px;
-    background: #2a2a2a;
+    background: var(--bg-panel);
     padding: 15px;
     border-radius: 8px;
     text-align: left;
@@ -846,7 +846,7 @@ body.admin-mode th.admin-only { display: table-cell !important; }
 }
 :is(#screen-tournaments, #admin-tournaments) .match-card {
     width: 100%;
-    background: #1a1a1a;
+    background: var(--bg-panel);
     border: 1px solid var(--border-color);
     border-radius: 6px;
     padding: 6px 8px;
@@ -891,7 +891,7 @@ body.admin-mode th.admin-only { display: table-cell !important; }
     table-layout: fixed;
     border-collapse: collapse;
     margin: 20px 0;
-    background: #1a1a1a;
+    background: var(--bg-panel);
     border-radius: 6px;
     overflow: hidden;
     font-size: 12px;
@@ -904,7 +904,7 @@ body.admin-mode th.admin-only { display: table-cell !important; }
     overflow-wrap: break-word;
 }
 :is(#screen-tournaments, #admin-tournaments) .standings-table th {
-    background: #222;
+    background: var(--bg-deep);
     color: var(--uha-gold);
     font-size: 10px;
     line-height: 1.25;
@@ -929,7 +929,7 @@ body.admin-mode th.admin-only { display: table-cell !important; }
 }
 :is(#screen-tournaments, #admin-tournaments) .score-input {
     width: 50px;
-    background: #222;
+    background: var(--bg-deep);
     color: white;
     border: 1px solid #444;
     padding: 8px;
