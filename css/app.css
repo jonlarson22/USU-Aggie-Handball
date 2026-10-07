@@ -465,9 +465,9 @@ body.admin-mode th.admin-only { display: table-cell !important; }
 :is(#screen-leaderboard, #screen-enter, #screen-history, #screen-admin) button:not(.admin-subtab):not(.tab):not(.qa-approve):not(.qa-review):not(.qa-reject):not(.btn-sm) {
     padding: 12px;
     border-radius: 6px;
-    border: 1px solid #444;
-    background: #2d2d2d;
-    color: white;
+    border: 1px solid var(--border-color);
+    background: var(--bg-panel);
+    color: var(--text-light);
     width: 100%;
 }
 :is(#screen-leaderboard, #screen-enter, #screen-history, #screen-admin) .search-input {
@@ -655,7 +655,7 @@ body.admin-mode th.admin-only { display: table-cell !important; }
     padding: 10px;
     background: var(--bg-deep);
     border: 1px solid var(--border-color);
-    color: white;
+    color: var(--text-light);
     border-radius: 4px;
     margin-bottom: 10px;
 }
@@ -972,9 +972,9 @@ body.admin-mode th.admin-only { display: table-cell !important; }
     overflow-wrap: anywhere;
 }
 .role-row select {
-    background: #2d2d2d;
-    color: white;
-    border: 1px solid #444;
+    background: var(--bg-panel);
+    color: var(--text-light);
+    border: 1px solid var(--border-color);
     border-radius: 6px;
     padding: 8px;
 }

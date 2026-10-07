@@ -941,7 +941,7 @@ function eloGraphSVG(seriesList) {
             `<span style="color:${s.color};">&#9679; ${s.label}</span>`).join('&nbsp;&nbsp;') + `</div>` : '';
     const dates = `<text x="${PL}" y="${H - 8}" fill="#888" font-size="11">${fmtDate(minT)}</text>` +
         `<text x="${W - PR}" y="${H - 8}" fill="#888" font-size="11" text-anchor="end">${fmtDate(maxT)}</text>`;
-    return `${legend}<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;background:#141414;border-radius:8px;" role="img">${g}${paths}${dates}</svg>`;
+    return `${legend}<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;background:var(--bg-panel);border-radius:8px;" role="img">${g}${paths}${dates}</svg>`;
 }
 function showGraphTip(e, text) {
     let tip = document.getElementById('graph-tip');
