@@ -1,14 +1,13 @@
 /* Handball — shared core (Phase 3 rebuild).
    Owns: Firebase init, shared player store, auth + roles, top-level navigation. */
-// TODO: paste the USU Aggie Handball Firebase project config here
 const firebaseConfig = {
-  apiKey: "PASTE_API_KEY",
-  authDomain: "PASTE_PROJECT_ID.firebaseapp.com",
-  databaseURL: "https://PASTE_PROJECT_ID-default-rtdb.firebaseio.com",
-  projectId: "PASTE_PROJECT_ID",
-  storageBucket: "PASTE_PROJECT_ID.firebasestorage.app",
-  messagingSenderId: "PASTE_SENDER_ID",
-  appId: "PASTE_APP_ID"
+  apiKey: "AIzaSyAkWOo0G_O91Cszv6qX6_elfB2qoGrTS_U",
+  authDomain: "usu-aggie-handball.firebaseapp.com",
+  databaseURL: "https://usu-aggie-handball-default-rtdb.firebaseio.com",
+  projectId: "usu-aggie-handball",
+  storageBucket: "usu-aggie-handball.firebasestorage.app",
+  messagingSenderId: "726626777696",
+  appId: "1:726626777696:web:e4a9b3760cc97877a7a105"
 };
 
 firebase.initializeApp(firebaseConfig);
