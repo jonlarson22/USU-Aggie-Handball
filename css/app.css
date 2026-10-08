@@ -685,8 +685,8 @@ body.admin-mode th.admin-only { display: table-cell !important; }
     text-transform: uppercase;
 }
 :is(#screen-tournaments, #admin-tournaments) .mode-btn.active {
-    background: var(--uha-blue);
-    color: white;
+    background: var(--uha-blue) !important;
+    color: white !important;
 }
 
 /* player list & draft slots */
