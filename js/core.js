@@ -33,6 +33,7 @@ const playersSubscribers = [];
 function onPlayersUpdate(fn) { playersSubscribers.push(fn); }
 db.ref('players').on('value', (snap) => {
     clubPlayers = normalizePlayers(snap.val());
+    refreshDisplayNames(clubPlayers);
     playersSubscribers.forEach(fn => { try { fn(clubPlayers); } catch (e) { console.error('players subscriber failed:', e); } });
     syncPlayerIdCounter(clubPlayers);
 });
@@ -74,6 +75,51 @@ function can(perm) {
         case 'roles':       return userRole === 'owner';
         default:            return false;
     }
+}
+
+/* ---------- player display names ----------
+   Shows "J. Larson" normally. If two players share the same initial+last,
+   shows full first name ("John Smith" vs "James Smith") as tiebreaker.
+   Single-name players display as-is. */
+let _nameCounts = {};
+function buildNameIndex(roster) {
+    _nameCounts = {};
+    (roster || []).forEach(p => {
+        const key = shortNameKey(p);
+        if (key) _nameCounts[key] = (_nameCounts[key] || 0) + 1;
+    });
+}
+function shortNameKey(p) {
+    if (!p) return '';
+    const fn = (p.firstName || '').trim();
+    const ln = (p.lastName || '').trim();
+    if (!ln) return fn;  // single-name: just first name
+    if (!fn) return ln;   // no first: just last name
+    return fn[0].toUpperCase() + '. ' + ln;
+}
+function displayName(p) {
+    if (!p) return '';
+    const fn = (p.firstName || '').trim();
+    const ln = (p.lastName || '').trim();
+    // Legacy: if still has old 'name' field, use it
+    if (!fn && !ln && p.name) return p.name;
+    if (!fn) return ln;
+    if (!ln) return fn;
+    const short = fn[0].toUpperCase() + '. ' + ln;
+    // Tiebreaker: if another player shares this short name, use full first name
+    const key = shortNameKey(p);
+    if (_nameCounts[key] > 1) return fn + ' ' + ln;
+    return short;
+}
+
+
+/* Refresh the computed 'name' display field for all players.
+   Call after loading, adding, or editing players. */
+function refreshDisplayNames(roster) {
+    buildNameIndex(roster);
+    (roster || []).forEach(p => {
+        p.name = displayName(p);
+    });
 }
 
 /* ---------- connection status (green = live, red = failed) ---------- */

@@ -189,21 +189,24 @@ function updateTeamElo(teamDiv) {
 }
 
 document.getElementById('btn-add-player').addEventListener('click', () => {
-    const nameStr = document.getElementById('new-player-name').value.trim();
+    const firstName = document.getElementById('new-player-first').value.trim();
+    const lastName = document.getElementById('new-player-last').value.trim();
     const singlesVal = parseFloat(document.getElementById('new-player-singles').value) || 1000;
     const doublesVal = parseFloat(document.getElementById('new-player-doubles').value) || 1000;
     const isMember = document.getElementById('new-player-member').checked;
     
-    if (!nameStr) return alert("Enter a player name");
+    if (!firstName && !lastName) return alert("Enter a player name");
     
-    if (allPlayers.some(p => p.name.toLowerCase() === nameStr.toLowerCase())) {
+    const fullName = (firstName + ' ' + lastName).trim().toLowerCase();
+    if (allPlayers.some(p => ((p.firstName||'') + ' ' + (p.lastName||'')).trim().toLowerCase() === fullName)) {
         return alert("Player already exists in the database.");
     }
 
     getNextPlayerId().then(id => {
         const newPlayer = {
             id: id,
-            name: nameStr,
+            firstName: firstName,
+            lastName: lastName,
             singles: singlesVal,
             doubles: doublesVal,
             baseS: singlesVal,
@@ -216,7 +219,8 @@ document.getElementById('btn-add-player').addEventListener('click', () => {
 
         allPlayers.push(newPlayer);
         return db.ref('players').set(allPlayers).then(() => {
-            document.getElementById('new-player-name').value = '';
+            document.getElementById('new-player-first').value = '';
+            document.getElementById('new-player-last').value = '';
             document.getElementById('new-player-singles').value = '1000';
             document.getElementById('new-player-doubles').value = '1000';
             document.getElementById('new-player-member').checked = true;
@@ -250,7 +254,7 @@ function renderSeedPicker() {
     const poolEl = document.getElementById('seed-pool');
     listEl.innerHTML = manualSeeds.length
         ? manualSeeds.map((n, i) => `
-            <div style="display:flex; align-items:center; gap:6px; background:var(--bg-panel); padding:6px 8px; border-radius:4px; margin-bottom:4px;">
+            <div style="display:flex; align-items:center; gap:6px; background:#1a1a1a; padding:6px 8px; border-radius:4px; margin-bottom:4px;">
                 <span style="background:var(--uha-gold); color:#000; font-weight:bold; border-radius:4px; padding:2px 8px; font-size:12px;">${i + 1}</span>
                 <span style="flex:1;">${n}</span>
                 <button onclick="moveSeed(${i}, -1)" style="width:auto; padding:2px 8px; font-size:12px;" ${i === 0 ? 'disabled style="width:auto; padding:2px 8px; font-size:12px; opacity:0.3;"' : ''}>▲</button>

@@ -88,17 +88,19 @@ function showToast(message, isError = false) {
 }
 
 function addPlayer() {
-    const n = document.getElementById('addN').value.trim();
+    const firstN = document.getElementById('addFirst').value.trim();
+    const lastN = document.getElementById('addLast').value.trim();
     const isMem = document.getElementById('addMember').checked;
-    if(!n) return;
+    if(!firstN && !lastN) return;
     getNextPlayerId().then(id => {
         players.push({
-            id: id, name: n, singles: 1000, doubles: 1000,
+            id: id, firstName: firstN, lastName: lastN, singles: 1000, doubles: 1000,
             baseS: 1000, baseD: 1000, peakS: 1000, peakD: 1000,
             active: true, isMember: isMem
         });
         save();
-        document.getElementById('addN').value = '';
+        document.getElementById('addFirst').value = '';
+        document.getElementById('addLast').value = '';
         filterTable();
         if (typeof showToast === 'function') showToast(`Player added — ID #${id}`);
     }).catch(e => alert('Could not assign a player ID: ' + e.message));
@@ -107,7 +109,8 @@ function addPlayer() {
 function loadEditData() {
     const p = players.find(x => x.id == document.getElementById('editList').value);
     if(p) { 
-        document.getElementById('editN').value = p.name; 
+        document.getElementById('editFirst').value = p.firstName || ''; 
+        document.getElementById('editLast').value = p.lastName || ''; 
         document.getElementById('editS').value = p.singles; 
         document.getElementById('editD').value = p.doubles; 
     }
@@ -115,10 +118,12 @@ function loadEditData() {
 
     function updatePlayer() {
     const p = players.find(x => x.id == document.getElementById('editList').value);
-    const newName = document.getElementById('editN').value.trim();
+    const newFirst = document.getElementById('editFirst').value.trim();
+    const newLast = document.getElementById('editLast').value.trim();
     
-    if(p && newName) { 
-        p.name = newName; 
+    if(p && (newFirst || newLast)) { 
+        p.firstName = newFirst;
+        p.lastName = newLast; 
         p.isMember = document.getElementById('editMember').checked;
         
         const inputS = parseFloat(document.getElementById('editS').value);
@@ -941,7 +946,7 @@ function eloGraphSVG(seriesList) {
             `<span style="color:${s.color};">&#9679; ${s.label}</span>`).join('&nbsp;&nbsp;') + `</div>` : '';
     const dates = `<text x="${PL}" y="${H - 8}" fill="#888" font-size="11">${fmtDate(minT)}</text>` +
         `<text x="${W - PR}" y="${H - 8}" fill="#888" font-size="11" text-anchor="end">${fmtDate(maxT)}</text>`;
-    return `${legend}<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;background:var(--bg-panel);border-radius:8px;" role="img">${g}${paths}${dates}</svg>`;
+    return `${legend}<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;background:#141414;border-radius:8px;" role="img">${g}${paths}${dates}</svg>`;
 }
 function showGraphTip(e, text) {
     let tip = document.getElementById('graph-tip');
@@ -1033,7 +1038,7 @@ function renderReport() {
             <h3 style="margin-top:0;">Rating Adjustments (${adjList.length})</h3>
             <div style="overflow-x:auto;">
             <table style="width:100%;border-collapse:collapse;font-size:12px;">
-                <thead><tr style="background:var(--bg-deep);">
+                <thead><tr style="background:#222;">
                     <th style="padding:8px;text-align:left;">Date</th>
                     <th style="padding:8px;"></th>
                     <th style="padding:8px;text-align:left;">Type</th>
@@ -1072,7 +1077,7 @@ function renderReport() {
             <h3 style="margin-top:0;">Matches (${allMs.length}${allMs.length > 100 ? ', showing 100' : ''})</h3>
             <div style="overflow-x:auto;">
             <table style="width:100%;border-collapse:collapse;font-size:12px;">
-                <thead><tr style="background:var(--bg-deep);">
+                <thead><tr style="background:#222;">
                     <th style="padding:8px;text-align:left;">Date</th>
                     <th style="padding:8px;">W/L</th>
                     <th style="padding:8px;text-align:left;">Opponents</th>

@@ -194,7 +194,8 @@
 <div class="mgmt-box admin-only">
     <div style="margin-bottom: 18px;">
         <span class="label">ADD PLAYER</span>
-        <input type="text" id="addN" placeholder="Name" style="margin-bottom: 8px; width: 100%;">
+        <input type="text" id="addFirst" placeholder="First Name" style="margin-bottom: 8px; width: 48%; display: inline-block;">
+        <input type="text" id="addLast" placeholder="Last Name" style="margin-bottom: 8px; width: 48%; display: inline-block; margin-left: 4%;">
         <button onclick="addPlayer()" style="background:#3498db; width: 100%; margin-bottom: 8px;">Create</button>
         <div style="display: flex; align-items: center; gap: 5px;">
             <input type="checkbox" id="addMember" checked style="width: auto; margin: 0; cursor: pointer;">
@@ -218,7 +219,8 @@
     <div>
         <span class="label">EDIT PLAYER / RATINGS</span>
         <select id="editList" onchange="loadPlayer()" style="width: 100%; margin-bottom: 8px;"></select>
-        <input type="text" id="editN" placeholder="Update Name" style="margin-bottom: 8px; width: 100%;">
+        <input type="text" id="editFirst" placeholder="First Name" style="margin-bottom: 8px; width: 48%; display: inline-block;">
+        <input type="text" id="editLast" placeholder="Last Name" style="margin-bottom: 8px; width: 48%; display: inline-block; margin-left: 4%;">
         <div style="display: flex; gap: 8px; margin-bottom: 8px;">
             <input type="number" id="editS" placeholder="Singles rating" style="flex: 1;">
             <input type="number" id="editD" placeholder="Doubles rating" style="flex: 1;">
@@ -328,7 +330,8 @@
                <div class="section-title">Players</div>
 
                 <div class="input-group" style="flex-wrap: wrap; background: var(--bg-panel); padding: 10px; border-radius: 6px; border: 1px solid #333;">
-                    <input type="text" id="new-player-name" placeholder="New Player Name" style="flex: 2; min-width: 150px; margin-bottom: 5px;">
+                    <input type="text" id="new-player-first" placeholder="First Name" style="flex: 1; min-width: 100px; margin-bottom: 5px;">
+                    <input type="text" id="new-player-last" placeholder="Last Name" style="flex: 1; min-width: 100px; margin-bottom: 5px;">
                     
                     <div style="display: flex; gap: 5px; flex: 1; min-width: 170px; margin-bottom: 5px;">
                         <input type="number" id="new-player-singles" placeholder="Singles" value="1000" style="width: 50%;">
