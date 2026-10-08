@@ -687,6 +687,10 @@ body.admin-mode th.admin-only { display: table-cell !important; }
 :is(#screen-tournaments, #admin-tournaments) .mode-btn.active {
     background: var(--uha-blue);
     color: white;
+    box-shadow: inset 0 0 0 2px rgba(255,255,255,0.35), 0 2px 6px rgba(0,0,0,0.4);
+}
+:is(#screen-tournaments, #admin-tournaments) .mode-btn:not(.active) {
+    background: rgba(128,128,128,0.12);
 }
 
 /* player list & draft slots */
@@ -1012,6 +1016,13 @@ body.admin-mode th.admin-only { display: table-cell !important; }
     :is(#screen-tournaments, #admin-tournaments) .setup-columns {
         flex-direction: row;
         gap: 25px;
+    }
+    :is(#screen-tournaments, #admin-tournaments) .setup-columns .column {
+        flex: 1 1 0;
+        min-width: 0;
+    }
+    :is(#screen-tournaments, #admin-tournaments) .setup-columns .column:nth-child(2) {
+        flex: 1.25 1 0;
     }
     :is(#screen-tournaments, #admin-tournaments) .column { padding: 20px; }
     :is(#screen-tournaments, #admin-tournaments) #player-list { max-height: 500px; }
