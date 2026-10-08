@@ -13,10 +13,10 @@
       "type": "image/png"
     }
   ],
-  "id": "https://jonlarson22.github.io/USU-Aggie-Handball/",
+  "id": "https://jonlarson22.github.io/USU-Aggie-Handball/?source=pwa",
   "name": "USU Aggie Handball",
-  "scope": "/USU-Aggie-Handball/",
+  "scope": "https://jonlarson22.github.io/USU-Aggie-Handball/",
   "short_name": "Aggie Handball",
-  "start_url": "index.html",
+  "start_url": "https://jonlarson22.github.io/USU-Aggie-Handball/index.html",
   "theme_color": "#0F2439"
 }
