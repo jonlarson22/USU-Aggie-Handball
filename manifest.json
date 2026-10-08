@@ -6,13 +6,13 @@
       "sizes": "192x192",
       "src": "icon-192.png",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "sizes": "512x512",
       "src": "icon.png",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ],
   "id": "usu-aggie-handball-b8a09b4a",
