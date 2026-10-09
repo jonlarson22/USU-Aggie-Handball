@@ -536,11 +536,13 @@ function runH2H() {
             <span style="color: #e74c3c;">${lNames}</span>`;
     }
 
+    const h2hDate = m.playedAt ? new Date(m.playedAt).toLocaleDateString('en-US', {month: 'numeric', day: 'numeric'}) : '';
     recentHTML += `
         <div class="h2h-recent-item" style="display: flex; justify-content: space-between; align-items: center; 
             padding: ${isFirst ? '0 0 10px 0' : '10px 0'}; 
             ${isFirst ? '' : 'border-top: 1px solid #333;'}">
-            <div style="font-size: 11px;">${matchupHTML}</div>
+            <div style="font-size: 10px; color: #888; min-width: 36px; text-align: center;">${h2hDate}</div>
+            <div style="font-size: 11px; flex: 1; padding: 0 8px;">${matchupHTML}</div>
             <div style="text-align: right; min-width: 60px;">
                 <div style="font-weight: bold; color: #fff;">${m.score}</div>
                 <div style="font-size: 10px; color: #888;">${getGameString(m)}</div>
@@ -797,7 +799,7 @@ function render() {
                 return names.includes(hq);
             });
         if (!hlist.length) {
-            historyBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 20px;" class="muted">No ${historyMode} matches found.</td></tr>`;
+            historyBody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 20px;" class="muted">No ${historyMode} matches found.</td></tr>`;
         } else {
         historyBody.innerHTML = hlist.slice(0, 15).map(m => {
             const isDoubles = m.mode === 'doubles';
@@ -844,7 +846,9 @@ function render() {
                 `<div style="font-size:10px; color:#888;">(${m.detailedGames.map(g => `${g.w}-${g.l}`).join(', ')})</div>` : 
                 '';
 
+            const dateStr = m.playedAt ? new Date(m.playedAt).toLocaleDateString('en-US', {month: 'numeric', day: 'numeric'}) : '';
             return `<tr>
+                <td style="font-size:11px; text-align:center; white-space:nowrap;">${dateStr}</td>
                 <td style="font-size:11px">${matchupHTML}</td>
                 <td style="text-align:center;">
                     <div style="font-weight:bold;">${m.score || '0-0'}</div>
