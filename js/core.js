@@ -71,11 +71,17 @@ function can(perm) {
         case 'review':
         case 'players':
         case 'data':        return userRole === 'owner' || userRole === 'admin';
+        case 'review-tournaments': return true;  // owner, admin, director (tournament items only)
         case 'tournaments': return true;   // owner, admin, director
         case 'roles':       return userRole === 'owner';
         default:            return false;
     }
 }
+/* Can this user see the Review tab at all? */
+function canSeeReview() {
+    return can('review') || can('review-tournaments');
+}
+
 
 /* ---------- player display names ----------
    Shows "J. Larson" normally. If two players share the same initial+last,
@@ -154,8 +160,9 @@ function startPendingWatcher() {
         const count = val ? Object.keys(val).length : 0;
         updatePendingBadges(count);
         updatePendingBracketMap(val);
-        // Toast on new arrivals (owner/admin only, not on initial load, not when on Review tab)
-        if (_lastPendingCount > 0 && count > _lastPendingCount && can('review')) {
+        // Toast on new arrivals (not on initial load, not when on Review tab)
+        // Directors get toasts too (they can approve tournament items)
+        if (_lastPendingCount > 0 && count > _lastPendingCount && canSeeReview()) {
             const newItems = count - _lastPendingCount;
             const onReview = document.querySelector('[data-astab="review"]')?.classList.contains('active');
             const onAdmin = document.getElementById('tab-admin')?.classList.contains('active');
@@ -279,9 +286,14 @@ try {
 let activeAdminTab = 'review';
 const ADMIN_TABS = ['review', 'players', 'tournaments', 'data', 'roles'];
 const ADMIN_GATES = { review: 'review', players: 'players', tournaments: 'tournaments', data: 'data', roles: 'roles' };
+/* Review tab is special: directors see it too (tournament items only) */
+function canSeeAdminTab(name) {
+    if (name === 'review') return canSeeReview();
+    return can(ADMIN_GATES[name]);
+}
 
 function switchAdminTab(name) {
-    if (!name || !can(ADMIN_GATES[name])) return;
+    if (!name || !canSeeAdminTab(name)) return;
     activeAdminTab = name;
     applyAdminTabVisibility();
     window.scrollTo(0, 0);
@@ -294,7 +306,7 @@ function applyAdminTabVisibility() {
     const subtabs = document.getElementById('admin-subtabs');
     if (subtabs) subtabs.hidden = loggedOut || noRole;
     document.querySelectorAll('#admin-subtabs .admin-subtab').forEach(t => {
-        t.hidden = !can(ADMIN_GATES[t.dataset.astab]);
+        t.hidden = !canSeeAdminTab(t.dataset.astab);
         t.classList.toggle('active', t.dataset.astab === activeAdminTab);
     });
 

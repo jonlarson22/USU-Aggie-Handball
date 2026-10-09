@@ -284,14 +284,18 @@ function renderQueue() {
     const queueEl = document.getElementById('adminQueue');
     if (!queueEl) return;
     
-    if (pending.length === 0) {
-        queueEl.innerHTML = "";
+    // Directors only see tournament submissions (those with bracketRef)
+    const isDirectorOnly = (typeof can === 'function' && !can('review') && can('review-tournaments'));
+    const visiblePending = isDirectorOnly ? pending.filter(m => m.bracketRef) : pending;
+    
+    if (visiblePending.length === 0) {
+        queueEl.innerHTML = isDirectorOnly ? "<p style='color:var(--text-muted);'>No tournament submissions pending.</p>" : "";
         return;
     }
 
-    let html = `<h2 style="color: #f1c40f; border-bottom: 1px solid #f1c40f; padding-bottom: 10px;">⚠️ Pending Approvals (${pending.length})</h2>`;
+    let html = `<h2 style="color: #f1c40f; border-bottom: 1px solid #f1c40f; padding-bottom: 10px;">⚠️ Pending Approvals (${visiblePending.length})</h2>`;
     
-    pending.forEach((m, index) => {
+    visiblePending.forEach((m, index) => {
         const nameOf = (w) => {
             const id = resolvePlayerId(w);
             const hit = players.find(p => p.id == id);
@@ -308,7 +312,7 @@ function renderQueue() {
         const tourneyTag = isTourney
             ? `<div style="font-size:11px;color:var(--uha-gold);margin-bottom:4px;">\uD83C\uDFC6 ${m.source === 'live' ? 'Live scored' : 'Entered'} — ${m.bracketRef.divName || 'Event'} · ${m.bracketRef.roundLabel || ''}${m.keeper ? ` · scored by ${m.keeper}` : ''}</div>`
             : '';
-        const approveFn = isTourney ? `approveLiveMatch(${index})` : `approveMatch(${index})`;
+        const approveFn = isTourney ? `approveLiveMatchById(${m.id})` : `approveMatchById(${m.id})`;
         html += `
     <div class="queue-item">
         ${tourneyTag}
@@ -317,7 +321,7 @@ function renderQueue() {
         <div class="queue-actions">
             <button class="qa-approve" onclick="${approveFn}">APPROVE</button>
             <button class="qa-review" onclick="reviewSub(${index})">REVIEW/EDIT</button>
-            <button class="qa-reject" onclick="rejectSub(${index})">REJECT</button>
+            <button class="qa-reject" onclick="rejectSubById(${m.id})">REJECT</button>
         </div>
     </div>`;
     });
@@ -325,8 +329,14 @@ function renderQueue() {
 }
 
 function approveMatch(index) {
-    const m = pending[index];
+    const _m = pending[index];
+    if (_m) return approveMatchById(_m.id);
+    return;
+}
+function approveMatchById(id) {
+    const m = pending.find(x => x.id == id);
     if (!m) return;
+    const index = pending.indexOf(m);
 
     const winners = m.winners.map(resolvePlayerId).filter(id => id !== 0);
     const losers = m.losers.map(resolvePlayerId).filter(id => id !== 0);
@@ -416,7 +426,12 @@ window.cancelPendingEdit = function() {
 };
 
 function approveLiveMatch(index) {
-    const m = pending[index];
+    const _m = pending[index];
+    if (_m) return approveLiveMatchById(_m.id);
+    return;
+}
+function approveLiveMatchById(id) {
+    const m = pending.find(x => x.id == id);
     if (!m || !m.bracketRef) return;
     const ref = m.bracketRef;
 
@@ -456,7 +471,12 @@ function approveLiveMatch(index) {
 }
 
 function rejectSub(index) {
-    const m = pending[index];
+    const _m = pending[index];
+    if (_m) return rejectSubById(_m.id);
+    return;
+}
+function rejectSubById(id) {
+    const m = pending.find(x => x.id == id);
     if (!m) return;
 
     if (confirm("Permanently delete this submission?")) {
