@@ -536,7 +536,8 @@ function runH2H() {
             <span style="color: #e74c3c;">${lNames}</span>`;
     }
 
-    const h2hDate = m.playedAt ? new Date(m.playedAt).toLocaleDateString('en-US', {month: 'numeric', day: 'numeric'}) : '';
+    const h2hTs = m.playedAt || m.id;
+    const h2hDate = h2hTs ? new Date(h2hTs).toLocaleDateString('en-US', {month: 'numeric', day: 'numeric'}) : '';
     recentHTML += `
         <div class="h2h-recent-item" style="display: flex; justify-content: space-between; align-items: center; 
             padding: ${isFirst ? '0 0 10px 0' : '10px 0'}; 
@@ -823,7 +824,7 @@ function render() {
                         <div style="color: #e74c3c;">${lossNames}</div>
                     </div>`;
             } else {
-                matchupHTML = `<span style="color: #2ecc71;">${winNames}</span> <small style="color:#666">vs</small> <span style="color: #e74c3c;">${lossNames}</span>`;
+                matchupHTML = `<span style="color: #2ecc71; white-space:nowrap;">${winNames}</span> <small style="color:#666">vs</small> <span style="color: #e74c3c; white-space:nowrap;">${lossNames}</span>`;
             }
 
             let plusShifts = [];
@@ -846,7 +847,8 @@ function render() {
                 `<div style="font-size:10px; color:#888;">(${m.detailedGames.map(g => `${g.w}-${g.l}`).join(', ')})</div>` : 
                 '';
 
-            const dateStr = m.playedAt ? new Date(m.playedAt).toLocaleDateString('en-US', {month: 'numeric', day: 'numeric'}) : '';
+            const dateTs = m.playedAt || m.id;
+            const dateStr = dateTs ? new Date(dateTs).toLocaleDateString('en-US', {month: 'numeric', day: 'numeric'}) : '';
             return `<tr>
                 <td style="font-size:11px; text-align:center; white-space:nowrap;">${dateStr}</td>
                 <td style="font-size:11px">${matchupHTML}</td>
@@ -854,7 +856,7 @@ function render() {
                     <div style="font-weight:bold;">${m.score || '0-0'}</div>
                     ${detailedScore}
                 </td>
-                <td style="font-size:10px">${shiftHTML}</td>
+                <td style="font-size:10px; white-space:nowrap;">${shiftHTML}</td>
                 
                 <td class="admin-only">
                     <button class="undo-btn" onclick="undoMatch(${m.id})">Delete</button>
