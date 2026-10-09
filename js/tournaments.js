@@ -872,7 +872,7 @@ function renderTournamentView() {
                 standings.forEach((s, i) => {
                     html += `<tr>
                         <td style="color:var(--uha-blue); text-align: center; font-weight:bold;">#${i+1}</td>
-                        <td style="text-align:left; font-weight:bold;">${s.player.name}</td>
+                        <td style="text-align:left; font-weight:bold;">${(typeof resolveBracketName === 'function') ? resolveBracketName(s.player) : s.player.name}</td>
                         <td style="font-weight:bold; text-align: center;">${s.pts}</td>
                         <td style="text-align: center;">${s.matchWins}-${s.matchLosses}</td>
                         <td style="text-align: center;">${s.gamesWon}</td>
@@ -1507,6 +1507,10 @@ if (pubSelector) {
 
 loadArchiveList();
 onPlayersUpdate(refreshRosterFromDB);
+// Re-render brackets when roster loads (names resolve by ID)
+onPlayersUpdate(() => {
+    if (typeof renderTournamentView === 'function') renderTournamentView();
+});
 
 loadTournamentData('active');
 
