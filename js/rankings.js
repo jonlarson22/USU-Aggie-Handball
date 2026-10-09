@@ -537,12 +537,12 @@ function runH2H() {
     }
 
     const h2hTs = m.playedAt || m.id;
-    const h2hDate = h2hTs ? new Date(h2hTs).toLocaleDateString('en-US', {month: 'numeric', day: 'numeric'}) : '';
+    const h2hDate = h2hTs ? new Date(h2hTs).toLocaleDateString('en-US', {month: 'numeric', day: 'numeric', year: '2-digit'}) : '';
     recentHTML += `
         <div class="h2h-recent-item" style="display: flex; justify-content: space-between; align-items: center; 
             padding: ${isFirst ? '0 0 10px 0' : '10px 0'}; 
             ${isFirst ? '' : 'border-top: 1px solid #333;'}">
-            <div style="font-size: 10px; color: #888; min-width: 36px; text-align: center;">${h2hDate}</div>
+            <div style="font-size: 10px; color: #fff; min-width: 48px; text-align: center; white-space: nowrap;">${h2hDate}</div>
             <div style="font-size: 11px; flex: 1; padding: 0 8px;">${matchupHTML}</div>
             <div style="text-align: right; min-width: 60px;">
                 <div style="font-weight: bold; color: #fff;">${m.score}</div>
@@ -848,7 +848,7 @@ function render() {
                 '';
 
             const dateTs = m.playedAt || m.id;
-            const dateStr = dateTs ? new Date(dateTs).toLocaleDateString('en-US', {month: 'numeric', day: 'numeric'}) : '';
+            const dateStr = dateTs ? new Date(dateTs).toLocaleDateString('en-US', {month: 'numeric', day: 'numeric', year: '2-digit'}) : '';
             return `<tr>
                 <td style="font-size:11px; text-align:center; white-space:nowrap;">${dateStr}</td>
                 <td style="font-size:11px">${matchupHTML}</td>
