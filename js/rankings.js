@@ -514,7 +514,7 @@ function runH2H() {
             total++;
             if (aInW) winsA++; else winsB++;
             
-           if (total <= 5) {
+           if (total <= 10) {
     const isDoubles = m.mode === 'doubles';
     const wNames = m.winners.map(id => players.find(x => x.id == id)?.name || "??").join('/');
     const lNames = m.losers.map(id => players.find(x => x.id == id)?.name || "??").join('/');
