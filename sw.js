@@ -1,5 +1,5 @@
 /* Handball service worker (Phase 1): cache static assets, keep Firebase realtime on network. */
-const CACHE = 'aggie-handball-v23';
+const CACHE = 'aggie-handball-v24';
 const STATIC_ASSETS = ['./', './index.html', './manifest.json', './icon.png',
   './css/app.css', './js/core.js', './js/rankings.js', './js/tournaments.js'];
 

@@ -970,7 +970,7 @@ function generateMatchCardHTML(match, divIdx, rIdx, mIdx, bracketType = 'winners
         actionArea += `<div style="text-align:center; margin-top:6px;"><button class="uha-btn" style="width:auto; padding:5px 10px; font-size:11px; background:#f39c12;" onclick="goToReview()">👀 Review</button></div>`;
     }
 
-    const canSwap = canManageTournaments() && !isViewingArchive;
+    const canSwap = canManageTournaments() && !isViewingArchive && !hasScore;
     const swapBtn = (side, team) => (canSwap && team && team !== 'BYE' && team !== 'TBD')
         ? ` <button class="swap-btn" title="Swap player" onclick="event.stopPropagation();openSwapPicker(${divIdx},${rIdx},${mIdx},'${bracketType}','${side}')">⇄</button>`
         : '';
