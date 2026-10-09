@@ -69,10 +69,12 @@ function setH2HMode(m) {
     runH2H(); 
 }
 
-function showToast(message, isError = false) {
+function showToast(message, isError = false, onClick = null) {
     const toast = document.getElementById('toast');
     toast.innerText = message;
     toast.style.background = isError ? "#e74c3c" : "#2ecc71";
+    toast.style.cursor = onClick ? "pointer" : "default";
+    toast.onclick = onClick || (() => {});
     
     toast.style.display = "block";
     setTimeout(() => { 

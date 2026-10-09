@@ -122,6 +122,51 @@ function refreshDisplayNames(roster) {
     });
 }
 
+
+/* ---------- pending review notifications (admins only) ---------- */
+let _lastPendingCount = 0;
+let _pendingListenerActive = false;
+function startPendingWatcher() {
+    if (_pendingListenerActive) return;
+    if (!can('review')) return;  // owner/admin only
+    _pendingListenerActive = true;
+    db.ref('pending').on('value', (snap) => {
+        const val = snap.val();
+        const count = val ? Object.keys(val).length : 0;
+        updatePendingBadges(count);
+        // Toast on new arrivals (not on initial load, not when on Review tab)
+        if (_lastPendingCount > 0 && count > _lastPendingCount) {
+            const newItems = count - _lastPendingCount;
+            const onReview = document.querySelector('[data-astab="review"]')?.classList.contains('active');
+            const onAdmin = document.getElementById('tab-admin')?.classList.contains('active');
+            if (!(onAdmin && onReview) && typeof showToast === 'function') {
+                showToast(`${newItems} new match${newItems>1?'es':''} ready for review!`, () => {
+                    switchScreen('admin');
+                    if (typeof switchAdminTab === 'function') switchAdminTab('review');
+                });
+            }
+        }
+        _lastPendingCount = count;
+    });
+}
+function updatePendingBadges(count) {
+    ['admin-badge', 'review-badge'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.hidden = count === 0;
+            el.textContent = count > 99 ? '99+' : count;
+        }
+    });
+}
+function stopPendingWatcher() {
+    if (_pendingListenerActive) {
+        db.ref('pending').off('value');
+        _pendingListenerActive = false;
+    }
+    _lastPendingCount = 0;
+    updatePendingBadges(0);
+}
+
 /* ---------- connection status (green = live, red = failed) ---------- */
 function setConnectionStatus(ok) {
     const el = document.getElementById('connection-status');
@@ -297,6 +342,7 @@ function loadRoleAndFinish(user) {
             userRole = rec.role;
             isAdmin = true;
             refreshAuthUI();
+            startPendingWatcher();
         } else {
             // bootstrap: the very first admin login becomes the owner
             return db.ref('admins').once('value').then(all => {
@@ -308,6 +354,7 @@ function loadRoleAndFinish(user) {
                         isAdmin = true;
                         if (typeof showToast === 'function') showToast('Welcome — you are the club owner.');
                         refreshAuthUI();
+                        startPendingWatcher();
                     });
                 }
                 userRole = null;
@@ -328,6 +375,7 @@ firebase.auth().onAuthStateChanged((user) => {
     if (!user) {
         userRole = null;
         isAdmin = false;
+        stopPendingWatcher();
         // don't strand the user on a hidden admin screen
         const adminScreen = document.getElementById('screen-admin');
         if (adminScreen && !adminScreen.hidden) switchScreen('leaderboard');

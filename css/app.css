@@ -1051,3 +1051,20 @@ body.admin-mode th.admin-only { display: table-cell !important; }
     :is(#screen-tournaments, #admin-tournaments) .standings-table th,
     :is(#screen-tournaments, #admin-tournaments) .standings-table td { padding: 12px; }
 }
+
+/* pending count badges */
+.count-badge {
+    display: inline-block;
+    background: #e74c3c;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    min-width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 10px;
+    padding: 0 6px;
+    margin-left: 6px;
+    vertical-align: middle;
+}

@@ -24,7 +24,7 @@
     <button class="app-tab" data-screen="tournaments">Tournaments</button>
     <button class="app-tab" data-screen="enter">Enter Results</button>
     <button class="app-tab" data-screen="history">History</button>
-    <button class="app-tab" data-screen="admin" id="tab-admin">Admin</button>
+    <button class="app-tab" data-screen="admin" id="tab-admin">Admin <span id="admin-badge" class="count-badge" hidden></span></button>
 </nav>
 
 <main class="app">
@@ -180,7 +180,7 @@
         </div>
         <nav class="admin-subtabs" id="admin-subtabs">
             <div class="astab-row" style="display:flex;gap:6px;">
-                <button class="admin-subtab active" data-astab="review" style="flex:1;">Review</button>
+                <button class="admin-subtab active" data-astab="review" style="flex:1;">Review <span id="review-badge" class="count-badge" hidden></span></button>
                 <button class="admin-subtab" data-astab="players" style="flex:1;">Players</button>
                 <button class="admin-subtab" data-astab="tournaments" style="flex:1;">Tournaments</button>
             </div>
