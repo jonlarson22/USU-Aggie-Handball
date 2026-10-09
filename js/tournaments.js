@@ -899,7 +899,10 @@ function renderTournamentView() {
 }
 
 function generateMatchCardHTML(match, divIdx, rIdx, mIdx, bracketType = 'winners') {
-    const slotName = (team) => team ? team.name : (match.scores === 'BYE' ? 'BYE' : 'TBD');
+    const slotName = (team) => {
+        if (!team) return (match.scores === 'BYE' ? 'BYE' : 'TBD');
+        return (typeof resolveBracketName === 'function') ? resolveBracketName(team) : team.name;
+    };
     let teamA = slotName(match.p1);
     let teamB = slotName(match.p2);
     
@@ -994,8 +997,23 @@ window.openScoreModal = function(divIdx, rIdx, mIdx, bType = 'winners') {
 
     const match = targetBracket[rIdx][mIdx];
 
-    let p1Name = match.p1 ? match.p1.name : 'TBD';
-    let p2Name = match.p2 ? match.p2.name : 'TBD';
+
+/* Resolve bracket team name from current roster (not stored snapshot).
+   Falls back to stored name if player not found. */
+function resolveBracketName(team) {
+    if (!team) return 'TBD';
+    if (team.name === 'BYE' || team.name === 'TBD') return team.name;
+    const ids = team.ids || [];
+    if (!ids.length) return team.name || 'TBD';
+    const names = ids.map(id => {
+        const p = (typeof players !== 'undefined' ? players : []).find(x => x.id == id);
+        return p ? p.name : null;
+    }).filter(Boolean);
+    return names.length ? names.join(' / ') : (team.name || 'TBD');
+}
+
+    let p1Name = resolveBracketName(match.p1);
+    let p2Name = resolveBracketName(match.p2);
     
     document.getElementById('score-modal-title').innerText = `${p1Name} vs ${p2Name}`;
 

@@ -114,7 +114,9 @@ function loadEditData() {
         document.getElementById('editFirst').value = p.firstName || ''; 
         document.getElementById('editLast').value = p.lastName || ''; 
         document.getElementById('editS').value = p.singles; 
-        document.getElementById('editD').value = p.doubles; 
+        document.getElementById('editD').value = p.doubles;
+        const memberEl = document.getElementById('editMember');
+        if (memberEl) memberEl.checked = p.isMember !== false;
     }
 }
 
