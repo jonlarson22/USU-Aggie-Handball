@@ -123,19 +123,39 @@ function refreshDisplayNames(roster) {
 }
 
 
+
+/* Map of pending bracket submissions: "divIdx:rIdx:mIdx:bType" -> true */
+let _pendingBracketMap = {};
+function updatePendingBracketMap(pendingVal) {
+    _pendingBracketMap = {};
+    if (pendingVal) {
+        Object.values(pendingVal).forEach(item => {
+            const br = item.bracketRef;
+            if (br) {
+                const key = `${br.divIdx}:${br.rIdx}:${br.mIdx}:${br.bType}`;
+                _pendingBracketMap[key] = true;
+            }
+        });
+    }
+}
+function hasPendingReview(divIdx, rIdx, mIdx, bType) {
+    return !!_pendingBracketMap[`${divIdx}:${rIdx}:${mIdx}:${bType}`];
+}
+
 /* ---------- pending review notifications (admins only) ---------- */
 let _lastPendingCount = 0;
 let _pendingListenerActive = false;
 function startPendingWatcher() {
     if (_pendingListenerActive) return;
-    if (!can('review')) return;  // owner/admin only
+    if (!can('admin')) return;  // owner/admin/director only (anyone with Admin tab)
     _pendingListenerActive = true;
     db.ref('pending').on('value', (snap) => {
         const val = snap.val();
         const count = val ? Object.keys(val).length : 0;
         updatePendingBadges(count);
-        // Toast on new arrivals (not on initial load, not when on Review tab)
-        if (_lastPendingCount > 0 && count > _lastPendingCount) {
+        updatePendingBracketMap(val);
+        // Toast on new arrivals (owner/admin only, not on initial load, not when on Review tab)
+        if (_lastPendingCount > 0 && count > _lastPendingCount && can('review')) {
             const newItems = count - _lastPendingCount;
             const onReview = document.querySelector('[data-astab="review"]')?.classList.contains('active');
             const onAdmin = document.getElementById('tab-admin')?.classList.contains('active');

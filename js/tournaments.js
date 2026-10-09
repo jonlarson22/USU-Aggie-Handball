@@ -948,6 +948,10 @@ function generateMatchCardHTML(match, divIdx, rIdx, mIdx, bracketType = 'winners
     } else {
         actionArea = `<div style="color:var(--uha-gold); font-size:11px; text-align:center; padding:5px; font-weight:bold;">Complete</div>`;
     }
+    // Jump-to-review button for matches with pending submissions (owner/admin/director)
+    if (typeof hasPendingReview === 'function' && hasPendingReview(divIdx, rIdx, mIdx, bracketType) && typeof can === 'function' && can('admin')) {
+        actionArea += `<div style="text-align:center; margin-top:6px;"><button class="uha-btn" style="width:auto; padding:5px 10px; font-size:11px; background:#f39c12;" onclick="goToReview()">👀 Review</button></div>`;
+    }
 
     const canSwap = canManageTournaments() && !isViewingArchive;
     const swapBtn = (side, team) => (canSwap && team && team !== 'BYE' && team !== 'TBD')
@@ -1667,6 +1671,12 @@ function queueTournamentResult(divIdx, rIdx, mIdx, bType, gameScores, source, ke
         showToast('Result submitted for review!');
     }).catch(e => alert('Could not submit: ' + e.message));
 }
+
+window.goToReview = function() {
+    switchScreen('admin');
+    if (typeof switchAdminTab === 'function') switchAdminTab('review');
+};
+
 
 /* ================= live scoring =================
    Each bracket match can carry match.live = {
