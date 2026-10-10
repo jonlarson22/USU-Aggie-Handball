@@ -178,7 +178,7 @@ body {
 .report-stat-grid b { font-size: 20px; }
 .report-summary h3 { margin: 0 0 2px 0; font-size: 16px; }
 .report-stat-grid small { color: #888; font-size: 11px; }
-#report-body .panel { margin-bottom: 10px; }
+#report-body .panel { margin-bottom: 10px; padding: 8px 12px; }
 /* player report: row separators on screen */
 #report-body table { border-collapse: collapse; }
 #report-body tbody tr td { border-bottom: 1px solid #2e2e2e; }
