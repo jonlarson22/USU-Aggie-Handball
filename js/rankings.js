@@ -694,9 +694,11 @@ function recalculateSingleMatch(m) {
             return p;
         });
 
-    let filtered = globalRanked.filter(p => 
-        p.name.toLowerCase().includes(searchTerm)
-    );
+    let filtered = globalRanked.filter(p => {
+        const hay = [p.name, p.firstName, p.lastName, ((p.firstName||'')+' '+(p.lastName||'')).trim()]
+            .filter(Boolean).join(' ').toLowerCase();
+        return hay.includes(searchTerm);
+    });
 
     const totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
     const start = (currentPage - 1) * rowsPerPage;

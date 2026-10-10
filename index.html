@@ -144,9 +144,9 @@
 <h2>Head-to-Head</h2>
     <div class="h2h-box">
         <div style="display:flex; gap:10px; margin-bottom:15px;">
-            <div style="position:relative;"><input id="h2hA" type="text" placeholder="Type to search..." autocomplete="off" style="width:100%;"><div id="h2hA-list" style="display:none;position:absolute;top:100%;left:0;right:0;background:#222;border:1px solid #555;max-height:200px;overflow-y:auto;z-index:100;"></div></div>
+            <div style="position:relative;flex:1;"><input id="h2hA" type="text" placeholder="Type to search..." autocomplete="off" style="width:100%;min-width:140px;"><div id="h2hA-list" style="display:none;position:absolute;top:100%;left:0;right:0;background:#222;border:1px solid #555;max-height:200px;overflow-y:auto;z-index:100;"></div></div>
             <div style="align-self:center; font-weight:bold;">VS</div>
-            <div style="position:relative;"><input id="h2hB" type="text" placeholder="Type to search..." autocomplete="off" style="width:100%;"><div id="h2hB-list" style="display:none;position:absolute;top:100%;left:0;right:0;background:#222;border:1px solid #555;max-height:200px;overflow-y:auto;z-index:100;"></div></div>
+            <div style="position:relative;flex:1;"><input id="h2hB" type="text" placeholder="Type to search..." autocomplete="off" style="width:100%;min-width:140px;"><div id="h2hB-list" style="display:none;position:absolute;top:100%;left:0;right:0;background:#222;border:1px solid #555;max-height:200px;overflow-y:auto;z-index:100;"></div></div>
         </div>
 
         <div class="tab-bar" style="margin-bottom: 15px; background: var(--bg-deep);">
@@ -490,7 +490,7 @@
 
         <div style="text-align: left; margin-bottom: 15px;">
             <label style="color:var(--uha-blue); font-weight:bold; font-size: 14px;">Player:</label>
-            <select id="move-player-name" class="uha-input" style="width:100%;"></select>
+            <div style="position:relative;"><input id="move-player-name" type="text" placeholder="Type to search..." autocomplete="off" class="uha-input" style="width:100%;"><div id="move-player-name-list" style="display:none;position:absolute;top:100%;left:0;right:0;background:#222;border:1px solid #555;max-height:200px;overflow-y:auto;z-index:100;"></div></div>
         </div>
 
         <div style="display: flex; gap: 10px; margin-bottom: 15px; text-align:left;">

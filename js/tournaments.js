@@ -1180,7 +1180,7 @@ function finalizeBracketScore(divIdx, rIdx, mIdx, bType, gameScores) {
 
     const titleEl = document.getElementById('tourney-title');
     const inputEl = document.getElementById('tournament-name');
-    const tName = titleEl ? titleEl.innerText : (inputEl ? inputEl.value : "Aggie Tournament");
+    const tName = titleEl ? titleEl.innerText : (inputEl ? inputEl.value : "UHA Tournament");
 
     db.ref('tournaments/active').set({
         name: tName,
@@ -1303,7 +1303,7 @@ window.adminAutoWinBye = function(divIdx, rIdx, mIdx, bType) {
 
     const titleEl = document.getElementById('tourney-title');
     const inputEl = document.getElementById('tournament-name');
-    const tName = titleEl ? titleEl.innerText : (inputEl ? inputEl.value : "Aggie Tournament");
+    const tName = titleEl ? titleEl.innerText : (inputEl ? inputEl.value : "UHA Tournament");
 
     db.ref('tournaments/active').set({
         name: tName,
@@ -1323,23 +1323,42 @@ window.openManualMoveModal = function() {
 };
 
 function refreshMovePlayerOptions() {
-    const sel = document.getElementById('move-player-name');
+    const input = document.getElementById('move-player-name');
+    const list = document.getElementById('move-player-name-list');
     const divIdx = document.getElementById('move-div-idx').value;
     const div = lockedDivisions[divIdx];
-    if (!sel || !div) return;
-    // Every option is a real participant, so the moved player always carries ids.
+    if (!input || !list || !div) return;
     const seen = new Set();
-    const opts = (div.participants || []).filter(pt => {
+    const names = (div.participants || []).filter(pt => {
         const key = (pt.name || '').toLowerCase();
         if (!key || seen.has(key)) return false;
         seen.add(key); return true;
-    }).map(pt => `<option value="${pt.name}">${pt.name}</option>`).join('');
-    sel.innerHTML = opts || '<option value="">No participants</option>';
+    }).map(pt => pt.name);
+    // Store for filtering
+    input._names = names;
+    input.dataset.value = '';
+    input.value = '';
+    // Simple name filter
+    const render = () => {
+        const q = input.value.toLowerCase();
+        const matches = names.filter(n => n.toLowerCase().includes(q)).slice(0, 50);
+        list.innerHTML = matches.map(n => `<div class="search-opt" data-name="${n}" style="padding:8px 10px;cursor:pointer;border-bottom:1px solid #333;">${n}</div>`).join('') || '<div style="padding:8px;color:#888;">No matches</div>';
+        list.style.display = 'block';
+    };
+    input.onfocus = render;
+    input.oninput = () => { input.dataset.value = ''; render(); };
+    list.onclick = (e) => {
+        const opt = e.target.closest('.search-opt');
+        if (!opt) return;
+        input.dataset.value = opt.dataset.name;
+        input.value = opt.dataset.name;
+        list.style.display = 'none';
+    };
 }
 
 window.executeManualMove = function() {
     const divIdx = document.getElementById('move-div-idx').value;
-    const pName = document.getElementById('move-player-name').value;
+    const pName = document.getElementById('move-player-name').dataset.value || document.getElementById('move-player-name').value;
     const bType = document.getElementById('move-target-bracket').value; 
     const roundNum = parseInt(document.getElementById('move-target-round').value) - 1; // 0-indexed internally
     const matchNum = parseInt(document.getElementById('move-target-match').value) - 1; // 0-indexed internally
