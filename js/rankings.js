@@ -955,10 +955,9 @@ function eloGraphSVG(seriesList) {
     const X = t => PL + (maxT === minT ? (W - PL - PR) / 2 : (t - minT) / (maxT - minT) * (W - PL - PR));
     const Y = e => PT + (1 - (e - minE) / (maxE - minE)) * (H - PT - PB);
     let g = '';
-    for (let i = 0; i <= 4; i++) {
-        const e = minE + (maxE - minE) * i / 4;
+    for (let e = gridMin; e <= gridMax; e += step) {
         const y = Y(e).toFixed(1);
-        g += `<line x1="${PL}" y1="${y}" x2="${W - PR}" y2="${y}" stroke="#333" stroke-width="1"/><text x="${PL - 6}" y="${+y + 4}" fill="#888" font-size="11" text-anchor="end">${Math.round(e)}</text>`;
+        g += `<line class="grid-line" x1="${PL}" y1="${y}" x2="${W - PR}" y2="${y}" stroke="#333" stroke-width="1"/><text x="${PL - 6}" y="${+y + 4}" fill="#888" font-size="11" text-anchor="end">${e}</text>`;
     }
     const avgLines = seriesList.map(s => {
         if (s.avg == null) return '';
