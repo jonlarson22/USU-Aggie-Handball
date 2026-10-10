@@ -893,13 +893,7 @@ function openReport(playerId) {
     document.getElementById('report-player-name').textContent = p ? p.name + ' — Report' : 'Player Report';
     const fullName = p ? ((p.firstName || '') + ' ' + (p.lastName || '')).trim() || p.name : '';
     document.getElementById('report-print-title').textContent = p ? 'Player Report — ' + fullName : 'Player Report';
-    const fromV2 = document.getElementById('report-from').value;
-    const toV2 = document.getElementById('report-to').value;
-    const rangeStr = (fromV2 || toV2)
-        ? 'Report Range: ' + (fromV2 ? new Date(fromV2 + 'T00:00:00').toLocaleDateString('en-US', {month: 'numeric', day: 'numeric', year: '2-digit'}) : '…')
-          + ' - ' + (toV2 ? new Date(toV2 + 'T00:00:00').toLocaleDateString('en-US', {month: 'numeric', day: 'numeric', year: '2-digit'}) : '…')
-        : 'Report Range: All Time';
-    document.getElementById('report-print-date').textContent = rangeStr;
+    updateReportRange();
     const genEl = document.getElementById('report-generated');
     if (genEl) genEl.textContent = 'Generated ' + new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
     const opp = document.getElementById('report-opp');
@@ -969,7 +963,7 @@ function eloGraphSVG(seriesList) {
     const avgLines = seriesList.map(s => {
         if (s.avg == null) return '';
         const y = Y(s.avg).toFixed(1);
-        return `<line x1="${PL}" y1="${y}" x2="${W - PR}" y2="${y}" stroke="${s.color}" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.6"/>`;
+        return `<line x1="${PL}" y1="${y}" x2="${W - PR}" y2="${y}" stroke="${s.color}" stroke-width="2" stroke-dasharray="6,4" opacity="0.85"/>`;
     }).join('');
     const paths = seriesList.map(s => {
         if (!s.pts.length) return '';
@@ -985,9 +979,9 @@ function eloGraphSVG(seriesList) {
         }).join('');
         return `<path d="${d}" fill="none" stroke="${s.color}" stroke-width="2.5"/>${dots}`;
     }).join('');
-    const legend = seriesList.length > 1
-        ? `<div style="margin-bottom:6px;font-size:13px;">` + seriesList.map(s =>
-            `<span style="color:${s.color};">&#9679; ${s.label}</span>`).join('&nbsp;&nbsp;') + `</div>` : '';
+    const legend = `<div style="margin-bottom:6px;font-size:13px;">` + seriesList.map(s =>
+        `<span style="color:${s.color};">&#9679; ${s.label}</span>`).join('&nbsp;&nbsp;')
+        + `&nbsp;&nbsp;<span style="color:#888;">&#9472;&#9472; Average</span></div>`;
     let dates = '';
     const nTicks = 5;
     for (let i = 0; i < nTicks; i++) {
@@ -1019,7 +1013,18 @@ function hideGraphTip() {
     const tip = document.getElementById('graph-tip');
     if (tip) tip.style.display = 'none';
 }
+function updateReportRange() {
+    const fromV = document.getElementById('report-from').value;
+    const toV = document.getElementById('report-to').value;
+    const rangeStr = (fromV || toV)
+        ? 'Report Range: ' + (fromV ? new Date(fromV + 'T00:00:00').toLocaleDateString('en-US', {month: 'numeric', day: 'numeric', year: '2-digit'}) : '…')
+          + ' - ' + (toV ? new Date(toV + 'T00:00:00').toLocaleDateString('en-US', {month: 'numeric', day: 'numeric', year: '2-digit'}) : '…')
+        : 'Report Range: All Time';
+    const el = document.getElementById('report-print-date');
+    if (el) el.textContent = rangeStr;
+}
 function renderReport() {
+    updateReportRange();
     const body = document.getElementById('report-body');
     if (!body || reportPlayerId == null) return;
     const p = players.find(x => x.id == reportPlayerId);
