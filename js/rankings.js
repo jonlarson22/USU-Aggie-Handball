@@ -980,7 +980,7 @@ function eloGraphSVG(seriesList) {
         return `<path d="${d}" fill="none" stroke="${s.color}" stroke-width="2.5"/>${dots}`;
     }).join('');
     const legend = `<div style="margin-bottom:6px;font-size:13px;">` + seriesList.map(s =>
-        `<span style="color:${s.color};">&#9679; ${s.label}</span>&nbsp;<span style="color:${s.color};">&#9472;&#9472; ${s.label} Avg</span>`).join('&nbsp;&nbsp;') + `</div>`;
+        `<span style="color:${s.color};">&#9679; ${s.label}</span>&nbsp;&nbsp;<span style="color:${s.color};">&#9472;&#9472; ${s.label} Avg</span>`).join('&nbsp;&nbsp;&nbsp;&nbsp;') + `</div>`;
     let dates = '';
     const nTicks = 5;
     for (let i = 0; i < nTicks; i++) {
