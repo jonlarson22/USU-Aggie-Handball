@@ -172,14 +172,13 @@ body {
 .report-filter-row { display: flex; gap: 10px; }
 .report-filter-row > div { flex: 1; min-width: 0; }
 #report-filters label { display: block; margin-bottom: 4px; font-weight: bold; color: var(--uha-blue); font-size: 13px; }
-.report-summary { margin-bottom: 8px; padding: 6px 10px; }
-.report-stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; text-align: center; }
+.report-summary { margin-bottom: 6px; padding: 4px 10px; }
+.report-stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; text-align: center; }
 .report-stat-grid > div { display: flex; flex-direction: column; gap: 2px; }
-.report-stat-grid b { font-size: 15px; }
-.report-stat-grid { gap: 4px; }
-.report-summary h3 { margin: 0 0 4px 0; font-size: 14px; }
+.report-stat-grid b { font-size: 20px; }
+.report-summary h3 { margin: 0 0 2px 0; font-size: 16px; }
 .report-stat-grid small { color: #888; font-size: 11px; }
-#report-body .panel { margin-bottom: 14px; }
+#report-body .panel { margin-bottom: 10px; }
 /* player report: row separators on screen */
 #report-body table { border-collapse: collapse; }
 #report-body tbody tr td { border-bottom: 1px solid #2e2e2e; }
