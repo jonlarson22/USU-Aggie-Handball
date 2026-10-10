@@ -1562,14 +1562,25 @@ window.renderSwapList = function() {
     const isDoubles = div.mode && div.mode.toLowerCase() === 'doubles';
     const eloKey = isDoubles ? 'doubles' : 'singles';
     list.innerHTML = '';
+    // Header row
+    const hdr = document.createElement('div');
+    hdr.className = 'swap-pick swap-header';
+    hdr.style.cssText = 'font-weight:bold;color:#888;cursor:default;border-bottom:2px solid #555;';
+    hdr.innerHTML = `<span>Player</span><span>ELO</span>`;
+    list.appendChild(hdr);
     (players || [])
-        .filter(pl => !q || (pl.name || '').toLowerCase().includes(q))
+        .filter(pl => {
+            if (!q) return true;
+            const hay = [pl.name, pl.firstName, pl.lastName, ((pl.firstName||'')+' '+(pl.lastName||'')).trim()]
+                .filter(Boolean).join(' ').toLowerCase();
+            return hay.includes(q);
+        })
         .slice(0, 60)
         .forEach(pl => {
             const sel = swapPicks.includes(pl.id) ? ' selected' : '';
             const row = document.createElement('div');
             row.className = 'swap-pick' + sel;
-            row.innerHTML = `<span><b>${pl.name}</b> <span class="muted">#${pl.id}</span></span><span>${Math.round(pl[eloKey] || 1000)}</span>`;
+            row.innerHTML = `<span><b>${pl.name}</b></span><span>${Math.round(pl[eloKey] || 1000)}</span>`;
             row.onclick = () => toggleSwapPick(pl.id, isDoubles);
             list.appendChild(row);
         });
