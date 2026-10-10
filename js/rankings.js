@@ -891,7 +891,8 @@ function openReport(playerId) {
     reportMode = 'singles';
     const p = players.find(x => x.id == reportPlayerId);
     document.getElementById('report-player-name').textContent = p ? p.name + ' — Report' : 'Player Report';
-    document.getElementById('report-print-title').textContent = p ? 'Player Report — ' + p.name + ' (#' + p.id + ')' : 'Player Report';
+    const fullName = p ? ((p.firstName || '') + ' ' + (p.lastName || '')).trim() || p.name : '';
+    document.getElementById('report-print-title').textContent = p ? 'Player Report — ' + fullName : 'Player Report';
     document.getElementById('report-print-date').textContent = 'Generated ' + new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
     const opp = document.getElementById('report-opp');
     opp.innerHTML = '<option value="">All opponents</option>' + [...players]

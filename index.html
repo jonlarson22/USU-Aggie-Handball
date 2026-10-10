@@ -404,9 +404,15 @@
 
     <section id="screen-report" class="screen" hidden>
         <div id="report-print-head" hidden>
-            <h1>USU Aggie Handball</h1>
-            <h2 id="report-print-title">Player Report</h2>
-            <p id="report-print-date"></p>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                <img src="icon.png" alt="USU Logo" style="height: 60px; width: 60px; object-fit: contain;">
+                <div style="text-align: center; flex: 1;">
+                    <h1 style="margin: 0;">USU Aggie Handball</h1>
+                    <h2 id="report-print-title" style="margin: 5px 0;">Player Report</h2>
+                    <p id="report-print-date" style="margin: 0;"></p>
+                </div>
+                <img id="report-arch-logo" src="" alt="" style="height: 60px; width: 60px; object-fit: contain;">
+            </div>
         </div>
         <button class="uha-btn-outline btn-sm report-back" onclick="closeReport()">&#8592; Rankings</button>
         <div class="page-head"><h2 id="report-player-name">Player Report</h2></div>
@@ -422,10 +428,10 @@
                 </div>
             </div>
             <div style="margin-top: 4px;"><label for="repMS">Match Type</label></div>
-            <div class="tab-bar" style="margin: 12px 0; background: var(--bg-deep);">
-                <div id="repMS" class="tab active-tab" onclick="setReportMode('singles')">SINGLES</div>
-                <div id="repMD" class="tab" onclick="setReportMode('doubles')">DOUBLES</div>
-                <div id="repMB" class="tab" onclick="setReportMode('both')">BOTH</div>
+            <div class="tab-bar" style="margin: 8px 0; background: var(--bg-deep);">
+                <div id="repMS" class="tab active-tab" style="padding: 6px 12px; font-size: 12px;" onclick="setReportMode('singles')">SINGLES</div>
+                <div id="repMD" class="tab" style="padding: 6px 12px; font-size: 12px;" onclick="setReportMode('doubles')">DOUBLES</div>
+                <div id="repMB" class="tab" style="padding: 6px 12px; font-size: 12px;" onclick="setReportMode('both')">BOTH</div>
             </div>
             <div>
                 <label for="report-opp">Opponent</label>
