@@ -194,6 +194,70 @@ function stopPendingWatcher() {
     updatePendingBadges(0);
 }
 
+/* ---------- searchable player dropdown ---------- */
+function makePlayerSearchable(inputId, listId, onSelect) {
+    const input = document.getElementById(inputId);
+    const list = document.getElementById(listId);
+    if (!input || !list) return;
+    
+    let selectedId = input.dataset.value || '';
+    
+    function getMatches(query) {
+        const q = (query || '').toLowerCase().trim();
+        return players
+            .filter(p => !p.hidden)
+            .filter(p => {
+                if (!q) return true;
+                const hay = [p.name, p.firstName, p.lastName, ((p.firstName||'')+' '+(p.lastName||'')).trim()]
+                    .filter(Boolean).join(' ').toLowerCase();
+                return hay.includes(q);
+            })
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .slice(0, 50);
+    }
+    
+    function renderList() {
+        const matches = getMatches(input.value);
+        if (!matches.length) {
+            list.innerHTML = '<div style="padding:8px;color:#888;">No matches</div>';
+        } else {
+            list.innerHTML = matches.map(p => 
+                `<div class="search-opt" data-id="${p.id}" style="padding:8px 10px;cursor:pointer;border-bottom:1px solid #333;">${p.name}${p.hidden?' 👻':''}</div>`
+            ).join('');
+        }
+        list.style.display = 'block';
+    }
+    
+    input.addEventListener('focus', renderList);
+    input.addEventListener('input', () => { selectedId = ''; input.dataset.value = ''; renderList(); });
+    
+    list.addEventListener('click', (e) => {
+        const opt = e.target.closest('.search-opt');
+        if (!opt) return;
+        selectedId = opt.dataset.id;
+        input.dataset.value = selectedId;
+        const p = players.find(x => x.id == selectedId);
+        input.value = p ? p.name : '';
+        list.style.display = 'none';
+        if (onSelect) onSelect(selectedId);
+    });
+    
+    document.addEventListener('click', (e) => {
+        if (e.target !== input && !list.contains(e.target)) {
+            list.style.display = 'none';
+        }
+    });
+    
+    // Expose getter
+    input.getSelectedId = () => input.dataset.value || '';
+    input.setSelectedId = (id) => {
+        input.dataset.value = id || '';
+        const p = players.find(x => x.id == id);
+        input.value = p ? p.name : '';
+    };
+}
+
+
 /* ---------- connection status (green = live, red = failed) ---------- */
 function setConnectionStatus(ok) {
     const el = document.getElementById('connection-status');

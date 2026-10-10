@@ -109,7 +109,7 @@ function addPlayer() {
 }
 
 function loadEditData() {
-    const p = players.find(x => x.id == document.getElementById('editList').value);
+    const p = players.find(x => x.id == document.getElementById('editList').getSelectedId());
     if(p) { 
         document.getElementById('editFirst').value = p.firstName || ''; 
         document.getElementById('editLast').value = p.lastName || ''; 
@@ -121,7 +121,7 @@ function loadEditData() {
 }
 
     function updatePlayer() {
-    const p = players.find(x => x.id == document.getElementById('editList').value);
+    const p = players.find(x => x.id == document.getElementById('editList').getSelectedId());
     const newFirst = document.getElementById('editFirst').value.trim();
     const newLast = document.getElementById('editLast').value.trim();
     
@@ -147,10 +147,10 @@ function loadEditData() {
 }
 
     function processMatch() {
-    const w1ID = document.getElementById('w1').value;
-    const w2ID = document.getElementById('w2').value;
-    const l1ID = document.getElementById('l1').value;
-    const l2ID = document.getElementById('l2').value;
+    const w1ID = document.getElementById('w1').getSelectedId();
+    const w2ID = document.getElementById('w2').getSelectedId();
+    const l1ID = document.getElementById('l1').getSelectedId();
+    const l2ID = document.getElementById('l2').getSelectedId();
     
     const activeMode = mode || 'singles';
     let games = [];
@@ -393,12 +393,12 @@ function reviewSub(index) {
     const mappedWinners = (m.winners || []).map(resolvePlayerId);
     const mappedLosers = (m.losers || []).map(resolvePlayerId);
 
-    document.getElementById('w1').value = mappedWinners[0] || "0";
-    document.getElementById('l1').value = mappedLosers[0] || "0";
+    document.getElementById('w1').setSelectedId(mappedWinners[0] || "");
+    document.getElementById('l1').setSelectedId(mappedLosers[0] || "");
 
     if ((m.mode || 'singles') === 'doubles') {
-        document.getElementById('w2').value = mappedWinners[1] || "0";
-        document.getElementById('l2').value = mappedLosers[1] || "0";
+        document.getElementById('w2').setSelectedId(mappedWinners[1] || "");
+        document.getElementById('l2').setSelectedId(mappedLosers[1] || "");
     }
 
     const gamesList = m.games || m.detailedGames || [];
@@ -491,8 +491,8 @@ function rejectSubById(id) {
 }
 	
 function runH2H() {
-    const idA = document.getElementById('h2hA').value;
-    const idB = document.getElementById('h2hB').value;
+    const idA = document.getElementById('h2hA').getSelectedId();
+    const idB = document.getElementById('h2hB').getSelectedId();
     
     if (idA === "0" || idB === "0" || idA === idB) { 
         document.getElementById('h2hResults').style.display = 'none'; 
@@ -731,7 +731,7 @@ function changePage(step) {
 }
 
 function changeStatus(hide) {
-    const pID = document.getElementById('manageList').value;
+    const pID = document.getElementById('manageList').getSelectedId();
     const p = players.find(x => x.id == pID);
     if (pID === "0") return alert("Select a player.");
     
@@ -741,7 +741,7 @@ function changeStatus(hide) {
 }
 
 function loadPlayer() {
-    const selectedID = document.getElementById('editList').value;
+    const selectedID = document.getElementById('editList').getSelectedId();
     const p = players.find(x => x.id == selectedID);
 
     if(p) {
@@ -759,30 +759,41 @@ function loadPlayer() {
 function render() {
     filterTable(); 
 
-    const activeOpts = '<option value="0">Select Player</option>' + 
-        players.filter(p => !p.hidden)
-               .sort((a,b) => a.name.localeCompare(b.name))
-               .map(p => `<option value="${p.id}">${p.name}</option>`).join('');
-
-    const allOpts = '<option value="0">Select Player</option>' + 
-        players.sort((a,b) => a.name.localeCompare(b.name))
-               .map(p => `<option value="${p.id}">${p.name}${p.hidden ? ' 👻' : ''}</option>`).join('');
-
+    // Initialize searchable player inputs (preserve selections)
     ['w1','w2','l1','l2'].forEach(id => {
         const el = document.getElementById(id);
-        if(el) {
-            const cur = el.value;
-            el.innerHTML = activeOpts;
-            el.value = cur;
+        if (el && el.getSelectedId) {
+            const cur = el.getSelectedId();
+            makePlayerSearchable(id, id + '-list');
+            if (cur) el.setSelectedId(cur);
+        } else if (el) {
+            makePlayerSearchable(id, id + '-list');
         }
     });
-
-    ['h2hA','h2hB','editList','manageList'].forEach(id => {
+    ['h2hA','h2hB'].forEach(id => {
         const el = document.getElementById(id);
-        if(el) {
-            const cur = el.value;
-            el.innerHTML = allOpts;
-            el.value = cur;
+        if (el && el.getSelectedId) {
+            const cur = el.getSelectedId();
+            makePlayerSearchable(id, id + '-list', () => runH2H());
+            if (cur) el.setSelectedId(cur);
+        } else if (el) {
+            makePlayerSearchable(id, id + '-list', () => runH2H());
+        }
+    });
+    const repOpp = document.getElementById('report-opp');
+    if (repOpp && !repOpp.getSelectedId) {
+        makePlayerSearchable('report-opp', 'report-opp-list', () => renderReport());
+    }
+
+    // Searchable for edit/manage (preserve selections)
+    [['editList', () => loadEditData()], ['manageList', null]].forEach(([id, cb]) => {
+        const el = document.getElementById(id);
+        if (el && el.getSelectedId) {
+            const cur = el.getSelectedId();
+            makePlayerSearchable(id, id + '-list', cb);
+            if (cur) el.setSelectedId(cur);
+        } else if (el) {
+            makePlayerSearchable(id, id + '-list', cb);
         }
     });
 
@@ -795,7 +806,10 @@ function render() {
                 if (!hq) return true;
                 const names = [...(m.winners || []), ...(m.losers || [])].map(id => {
                     const p = players.find(x => x.id == id);
-                    return p ? p.name.toLowerCase() : '';
+                    if (!p) return '';
+                    // Search display name, first, last, and full name
+                    return [p.name, p.firstName, p.lastName, ((p.firstName||'')+' '+(p.lastName||'')).trim()]
+                        .filter(Boolean).join(' ').toLowerCase();
                 }).join(' ');
                 return names.includes(hq);
             });
@@ -897,10 +911,12 @@ function openReport(playerId) {
     const genEl = document.getElementById('report-generated');
     if (genEl) genEl.textContent = 'Generated ' + new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
     const opp = document.getElementById('report-opp');
-    opp.innerHTML = '<option value="">All opponents</option>' + [...players]
-        .filter(x => x.id != reportPlayerId && !x.hidden)
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .map(x => `<option value="${x.id}">${x.name}</option>`).join('');
+    if (opp) {
+        if (!opp.getSelectedId) makePlayerSearchable('report-opp', 'report-opp-list', () => renderReport());
+        opp.setSelectedId('');
+        opp.value = '';
+        opp.placeholder = 'All opponents';
+    }
     document.getElementById('report-from').value = '';
     document.getElementById('report-to').value = '';
     setReportModeTabs();
@@ -1038,7 +1054,7 @@ function renderReport() {
     const toV = document.getElementById('report-to').value;
     const fromT = fromV ? new Date(fromV + 'T00:00:00').getTime() : 0;
     const toT = toV ? new Date(toV + 'T00:00:00').getTime() : 0;
-    const oppId = document.getElementById('report-opp').value;
+    const oppId = document.getElementById('report-opp').getSelectedId();
     const oppName = oppId ? playerName(oppId) : '';
     const modes = reportMode === 'both' ? ['singles', 'doubles'] : [reportMode];
 

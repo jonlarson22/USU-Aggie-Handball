@@ -64,7 +64,7 @@
                     <label for="public-tournament-selector">Tournament:</label>
                     <select id="public-tournament-selector" class="uha-input">
                         <option value="active">Current Live Tournament</option>
-                    </select>
+                    
                 </div>
                 <div class="tourney-select">
                     <label for="public-division-selector">Event:</label>
@@ -92,8 +92,8 @@
     <div class="match-card">
     <div class="team-box winner-side">
         <span class="label" style="color:#2ecc71">🏆 WINNERS</span>
-        <select id="w1"></select>
-        <select id="w2" class="hidden d-only"></select>
+        <div style="position:relative;"><input id="w1" type="text" placeholder="Type to search..." autocomplete="off" style="width:100%;"><div id="w1-list" style="display:none;position:absolute;top:100%;left:0;right:0;background:#222;border:1px solid #555;max-height:200px;overflow-y:auto;z-index:100;"></div></div>
+        <div style="position:relative;" class="hidden d-only"><input id="w2" type="text" placeholder="Type to search..." autocomplete="off" style="width:100%;"><div id="w2-list" style="display:none;position:absolute;top:100%;left:0;right:0;background:#222;border:1px solid #555;max-height:200px;overflow-y:auto;z-index:100;"></div></div>
         <div style="display:flex; gap:5px; margin-top:10px; justify-content: center;">
             <input type="number" id="g1_w" class="score-input" placeholder="G1">
             <input type="number" id="g2_w" class="score-input" placeholder="G2">
@@ -102,8 +102,8 @@
     </div>
     <div class="team-box loser-side">
         <span class="label" style="color:#e74c3c">🥈 LOSERS</span>
-        <select id="l1"></select>
-        <select id="l2" class="hidden d-only"></select>
+        <div style="position:relative;"><input id="l1" type="text" placeholder="Type to search..." autocomplete="off" style="width:100%;"><div id="l1-list" style="display:none;position:absolute;top:100%;left:0;right:0;background:#222;border:1px solid #555;max-height:200px;overflow-y:auto;z-index:100;"></div></div>
+        <div style="position:relative;" class="hidden d-only"><input id="l2" type="text" placeholder="Type to search..." autocomplete="off" style="width:100%;"><div id="l2-list" style="display:none;position:absolute;top:100%;left:0;right:0;background:#222;border:1px solid #555;max-height:200px;overflow-y:auto;z-index:100;"></div></div>
         <div style="display:flex; gap:5px; margin-top:10px; justify-content: center;">
             <input type="number" id="g1_l" class="score-input" placeholder="G1">
             <input type="number" id="g2_l" class="score-input" placeholder="G2">
@@ -144,9 +144,9 @@
 <h2>Head-to-Head</h2>
     <div class="h2h-box">
         <div style="display:flex; gap:10px; margin-bottom:15px;">
-            <select id="h2hA" onchange="runH2H()"></select>
+            <div style="position:relative;"><input id="h2hA" type="text" placeholder="Type to search..." autocomplete="off" style="width:100%;"><div id="h2hA-list" style="display:none;position:absolute;top:100%;left:0;right:0;background:#222;border:1px solid #555;max-height:200px;overflow-y:auto;z-index:100;"></div></div>
             <div style="align-self:center; font-weight:bold;">VS</div>
-            <select id="h2hB" onchange="runH2H()"></select>
+            <div style="position:relative;"><input id="h2hB" type="text" placeholder="Type to search..." autocomplete="off" style="width:100%;"><div id="h2hB-list" style="display:none;position:absolute;top:100%;left:0;right:0;background:#222;border:1px solid #555;max-height:200px;overflow-y:auto;z-index:100;"></div></div>
         </div>
 
         <div class="tab-bar" style="margin-bottom: 15px; background: var(--bg-deep);">
@@ -210,7 +210,7 @@
 
     <div style="margin-bottom: 18px;">
         <span class="label">MANAGE ROSTER</span>
-        <select id="manageList" style="width: 100%; margin-bottom: 8px;"></select>
+        <div style="position:relative;margin-bottom:8px;"><input id="manageList" type="text" placeholder="Type to search..." autocomplete="off" style="width:100%;"><div id="manageList-list" style="display:none;position:absolute;top:100%;left:0;right:0;background:#222;border:1px solid #555;max-height:200px;overflow-y:auto;z-index:100;"></div></div>
         <div style="display:flex; gap:8px;">
             <button onclick="changeStatus(true)" style="background:#c0392b; flex:1;">Retire</button>
             <button onclick="changeStatus(false)" style="background:#27ae60; flex:1;">Reactivate</button>
@@ -221,7 +221,7 @@
 
     <div>
         <span class="label">EDIT PLAYER / RATINGS</span>
-        <select id="editList" onchange="loadEditData()" style="width: 100%; margin-bottom: 8px;"></select>
+        <div style="position:relative;margin-bottom:8px;"><input id="editList" type="text" placeholder="Type to search..." autocomplete="off" style="width:100%;"><div id="editList-list" style="display:none;position:absolute;top:100%;left:0;right:0;background:#222;border:1px solid #555;max-height:200px;overflow-y:auto;z-index:100;"></div></div>
         <div style="display: flex; gap: 8px; margin-bottom: 8px;">
         <input type="text" id="editFirst" placeholder="First Name" style="flex: 1; margin-bottom: 0;">
         <input type="text" id="editLast" placeholder="Last Name" style="flex: 1; margin-bottom: 0;">
@@ -429,7 +429,7 @@
             </div>
             <div>
                 <label for="report-opp">Opponent</label>
-                <select id="report-opp" class="uha-input" onchange="renderReport()">
+                <div style="position:relative;"><input id="report-opp" type="text" placeholder="All opponents" autocomplete="off" class="uha-input" style="width:100%;"><div id="report-opp-list" style="display:none;position:absolute;top:100%;left:0;right:0;background:#222;border:1px solid #555;max-height:200px;overflow-y:auto;z-index:100;"></div></div>
                     <option value="">All opponents</option>
                 </select>
             </div>
