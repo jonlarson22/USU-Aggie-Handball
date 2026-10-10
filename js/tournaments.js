@@ -89,11 +89,12 @@ function renderRoster() {
     const draftedIds = getDraftedPlayerIds();
     const searchTerm = searchInput.value.toLowerCase();
 
-    let availablePlayers = allPlayers.filter(p => 
-        p.active && 
-        !draftedIds.includes(String(p.id)) &&
-        p.name.toLowerCase().includes(searchTerm)
-    );
+    let availablePlayers = allPlayers.filter(p => {
+        if (!p.active || draftedIds.includes(String(p.id))) return false;
+        const hay = [p.name, p.firstName, p.lastName, ((p.firstName||'')+' '+(p.lastName||'')).trim()]
+            .filter(Boolean).join(' ').toLowerCase();
+        return hay.includes(searchTerm);
+    });
     
     availablePlayers.sort((a, b) => {
         const ratingA = isDoublesMode ? (a.doubles || 1000) : (a.singles || 1000);
@@ -1323,42 +1324,23 @@ window.openManualMoveModal = function() {
 };
 
 function refreshMovePlayerOptions() {
-    const input = document.getElementById('move-player-name');
-    const list = document.getElementById('move-player-name-list');
+    const sel = document.getElementById('move-player-name');
     const divIdx = document.getElementById('move-div-idx').value;
     const div = lockedDivisions[divIdx];
-    if (!input || !list || !div) return;
+    if (!sel || !div) return;
+    // Every option is a real participant, so the moved player always carries ids.
     const seen = new Set();
-    const names = (div.participants || []).filter(pt => {
+    const opts = (div.participants || []).filter(pt => {
         const key = (pt.name || '').toLowerCase();
         if (!key || seen.has(key)) return false;
         seen.add(key); return true;
-    }).map(pt => pt.name);
-    // Store for filtering
-    input._names = names;
-    input.dataset.value = '';
-    input.value = '';
-    // Simple name filter
-    const render = () => {
-        const q = input.value.toLowerCase();
-        const matches = names.filter(n => n.toLowerCase().includes(q)).slice(0, 50);
-        list.innerHTML = matches.map(n => `<div class="search-opt" data-name="${n}" style="padding:8px 10px;cursor:pointer;border-bottom:1px solid #333;">${n}</div>`).join('') || '<div style="padding:8px;color:#888;">No matches</div>';
-        list.style.display = 'block';
-    };
-    input.onfocus = render;
-    input.oninput = () => { input.dataset.value = ''; render(); };
-    list.onclick = (e) => {
-        const opt = e.target.closest('.search-opt');
-        if (!opt) return;
-        input.dataset.value = opt.dataset.name;
-        input.value = opt.dataset.name;
-        list.style.display = 'none';
-    };
+    }).map(pt => `<option value="${pt.name}">${pt.name}</option>`).join('');
+    sel.innerHTML = opts || '<option value="">No participants</option>';
 }
 
 window.executeManualMove = function() {
     const divIdx = document.getElementById('move-div-idx').value;
-    const pName = document.getElementById('move-player-name').dataset.value || document.getElementById('move-player-name').value;
+    const pName = document.getElementById('move-player-name').value;
     const bType = document.getElementById('move-target-bracket').value; 
     const roundNum = parseInt(document.getElementById('move-target-round').value) - 1; // 0-indexed internally
     const matchNum = parseInt(document.getElementById('move-target-match').value) - 1; // 0-indexed internally
