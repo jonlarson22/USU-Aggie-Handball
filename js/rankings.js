@@ -945,11 +945,14 @@ function eloGraphSVG(seriesList) {
     const W = 620, H = 240, PL = 46, PR = 12, PT = 14, PB = 30;
     const allPts = seriesList.reduce((a, s) => a.concat(s.pts), []);
     if (!allPts.length) return '<p class="muted" style="text-align:center;">No matches in this range.</p>';
-    let minE = Math.min(...allPts.map(p => p.elo));
-    let maxE = Math.max(...allPts.map(p => p.elo));
-    if (minE === maxE) { minE -= 10; maxE += 10; }
-    const pad = (maxE - minE) * 0.15 || 10;
-    minE -= pad; maxE += pad;
+    const dataMin = Math.min(...allPts.map(p => p.elo));
+    const dataMax = Math.max(...allPts.map(p => p.elo));
+    const center = Math.round((dataMin + dataMax) / 2 / 50) * 50;
+    const step = 150;
+    let gridMin = center, gridMax = center;
+    while (gridMin > dataMin - step * 0.3) gridMin -= step;
+    while (gridMax < dataMax + step * 0.3) gridMax += step;
+    const minE = gridMin, maxE = gridMax;
     const minT = Math.min(...allPts.map(p => p.t));
     const maxT = Math.max(...allPts.map(p => p.t));
     const X = t => PL + (maxT === minT ? (W - PL - PR) / 2 : (t - minT) / (maxT - minT) * (W - PL - PR));

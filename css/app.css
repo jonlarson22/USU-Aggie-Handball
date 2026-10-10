@@ -202,6 +202,8 @@ body {
     #report-body svg { background: #fff !important; border: 1px solid #ccc; }
     #report-body svg text { fill: #333 !important; }
     #report-body svg line.grid-line { stroke: #ccc !important; }
+    .print-only { display: block !important; }
+    p.print-only { display: block !important; }
 }
 
 /* ---------- live scoring ---------- */
