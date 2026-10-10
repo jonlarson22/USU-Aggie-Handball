@@ -201,7 +201,7 @@ body {
     #report-body tbody td { border-bottom: 1px solid #ccc !important; }
     #report-body svg { background: #fff !important; border: 1px solid #ccc; }
     #report-body svg text { fill: #333 !important; }
-    #report-body svg line { stroke: #ccc !important; }
+    #report-body svg line.grid-line { stroke: #ccc !important; }
 }
 
 /* ---------- live scoring ---------- */

@@ -980,8 +980,7 @@ function eloGraphSVG(seriesList) {
         return `<path d="${d}" fill="none" stroke="${s.color}" stroke-width="2.5"/>${dots}`;
     }).join('');
     const legend = `<div style="margin-bottom:6px;font-size:13px;">` + seriesList.map(s =>
-        `<span style="color:${s.color};">&#9679; ${s.label}</span>`).join('&nbsp;&nbsp;')
-        + `&nbsp;&nbsp;<span style="color:#888;">&#9472;&#9472; Average</span></div>`;
+        `<span style="color:${s.color};">&#9679; ${s.label}</span>&nbsp;<span style="color:${s.color};">&#9472;&#9472; ${s.label} Avg</span>`).join('&nbsp;&nbsp;') + `</div>`;
     let dates = '';
     const nTicks = 5;
     for (let i = 0; i < nTicks; i++) {
@@ -1016,9 +1015,12 @@ function hideGraphTip() {
 function updateReportRange() {
     const fromV = document.getElementById('report-from').value;
     const toV = document.getElementById('report-to').value;
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const isToday = toV === todayStr;
+    const endLabel = (!toV || isToday) ? 'Present' : new Date(toV + 'T00:00:00').toLocaleDateString('en-US', {month: 'numeric', day: 'numeric', year: '2-digit'});
     const rangeStr = (fromV || toV)
         ? 'Report Range: ' + (fromV ? new Date(fromV + 'T00:00:00').toLocaleDateString('en-US', {month: 'numeric', day: 'numeric', year: '2-digit'}) : '…')
-          + ' - ' + (toV ? new Date(toV + 'T00:00:00').toLocaleDateString('en-US', {month: 'numeric', day: 'numeric', year: '2-digit'}) : '…')
+          + ' - ' + endLabel
         : 'Report Range: All Time';
     const el = document.getElementById('report-print-date');
     if (el) el.textContent = rangeStr;
