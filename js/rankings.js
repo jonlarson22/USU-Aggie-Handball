@@ -893,7 +893,15 @@ function openReport(playerId) {
     document.getElementById('report-player-name').textContent = p ? p.name + ' — Report' : 'Player Report';
     const fullName = p ? ((p.firstName || '') + ' ' + (p.lastName || '')).trim() || p.name : '';
     document.getElementById('report-print-title').textContent = p ? 'Player Report — ' + fullName : 'Player Report';
-    document.getElementById('report-print-date').textContent = 'Generated ' + new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    const fromV2 = document.getElementById('report-from').value;
+    const toV2 = document.getElementById('report-to').value;
+    const rangeStr = (fromV2 || toV2)
+        ? 'Report Range: ' + (fromV2 ? new Date(fromV2 + 'T00:00:00').toLocaleDateString('en-US', {month: 'numeric', day: 'numeric', year: '2-digit'}) : '…')
+          + ' - ' + (toV2 ? new Date(toV2 + 'T00:00:00').toLocaleDateString('en-US', {month: 'numeric', day: 'numeric', year: '2-digit'}) : '…')
+        : 'Report Range: All Time';
+    document.getElementById('report-print-date').textContent = rangeStr;
+    const genEl = document.getElementById('report-generated');
+    if (genEl) genEl.textContent = 'Generated ' + new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
     const opp = document.getElementById('report-opp');
     opp.innerHTML = '<option value="">All opponents</option>' + [...players]
         .filter(x => x.id != reportPlayerId && !x.hidden)
@@ -958,6 +966,11 @@ function eloGraphSVG(seriesList) {
         const y = Y(e).toFixed(1);
         g += `<line x1="${PL}" y1="${y}" x2="${W - PR}" y2="${y}" stroke="#333" stroke-width="1"/><text x="${PL - 6}" y="${+y + 4}" fill="#888" font-size="11" text-anchor="end">${Math.round(e)}</text>`;
     }
+    const avgLines = seriesList.map(s => {
+        if (s.avg == null) return '';
+        const y = Y(s.avg).toFixed(1);
+        return `<line x1="${PL}" y1="${y}" x2="${W - PR}" y2="${y}" stroke="${s.color}" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.6"/>`;
+    }).join('');
     const paths = seriesList.map(s => {
         if (!s.pts.length) return '';
         const d = s.pts.map((p, i) => (i ? 'L' : 'M') + X(p.t).toFixed(1) + ',' + Y(p.elo).toFixed(1)).join(' ');
@@ -983,7 +996,7 @@ function eloGraphSVG(seriesList) {
         const anchor = i === 0 ? '' : (i === nTicks - 1 ? ' text-anchor="end"' : ' text-anchor="middle"');
         dates += `<text x="${x}" y="${H - 8}" fill="#888" font-size="10"${anchor}>${fmtDate(t)}</text>`;
     }
-    return `${legend}<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;background:#141414;border-radius:8px;" role="img">${g}${paths}${dates}</svg>`;
+    return `${legend}<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;background:#141414;border-radius:8px;" role="img">${g}${avgLines}${paths}${dates}</svg>`;
 }
 function showGraphTip(e, text) {
     let tip = document.getElementById('graph-tip');
@@ -1028,6 +1041,7 @@ function renderReport() {
         const elos = pts.map(q => q.elo);
         const mn = elos.length ? Math.min(...elos) : current;
         const mx = elos.length ? Math.max(...elos) : current;
+        const avg = elos.length ? elos.reduce((a, b) => a + b, 0) / elos.length : current;
         const mnPt = pts.find(q => q.elo === mn);
         const mxPt = pts.find(q => q.elo === mx);
         let fms = ms;
@@ -1036,15 +1050,16 @@ function renderReport() {
         const l = fms.length - w;
         const color = mode === 'singles' ? '#3498db' : '#f1c40f';
         const label = mode[0].toUpperCase() + mode.slice(1);
-        seriesList.push({ label, color, pts });
+        seriesList.push({ label, color, pts, avg });
         fms.forEach(m => allMs.push({ m, mode }));
         summaryHtml += `
         <div class="panel report-summary">
             <h3 style="color:${color};margin-top:0;">${label}</h3>
-            <div class="report-stat-grid">
+            <div class="report-stat-grid" style="grid-template-columns: repeat(5, 1fr);">
                 <div><span class="muted">Current</span><b>${Math.round(current)}</b></div>
                 <div><span class="muted">Peak</span><b>${Math.round(mx)}</b><small>${mxPt ? fmtDate(mxPt.t) : ''}</small></div>
                 <div><span class="muted">Low</span><b>${Math.round(mn)}</b><small>${mnPt ? fmtDate(mnPt.t) : ''}</small></div>
+                <div><span class="muted">Average</span><b>${Math.round(avg)}</b></div>
                 <div><span class="muted">Record${oppName ? ' vs ' + oppName : ''}</span><b>${w}W – ${l}L</b></div>
             </div>
         </div>`;
